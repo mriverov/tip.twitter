@@ -16,6 +16,7 @@ class StdOutListener(tweepy.StreamListener):
 	def on_error(self, status):
 		print status
 
+
 if __name__ == '__main__':
 	l = StdOutListener()
 	auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
@@ -27,3 +28,4 @@ if __name__ == '__main__':
 	except:
 		print "error!"
 		stream.disconnect()
+

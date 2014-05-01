@@ -16,3 +16,6 @@ print user.followers_count
 #esto no lo probe porque debe de tener un millon de amigos :P
 #for friend in user.friends():
    #print friend.screen_name
+
+
+#TODO Can you please wrap this into a pyunit unittest? 
