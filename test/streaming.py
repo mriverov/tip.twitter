@@ -11,3 +11,5 @@ auth.set_access_token(access_key, access_secret)
 l = tweepy.StreamListener()
 stream = tweepy.streaming.Stream(auth, l, timeout=60)
 stream.filter(track=['barcelona'])
+
+#TODO Can you please wrap this into a pyunit unittest ?
