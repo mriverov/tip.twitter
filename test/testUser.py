@@ -8,7 +8,7 @@ class UserTestCase(unittest.TestCase):
         auth = autenticator.autenticate()
         self.user = UserRepository(auth)
 
- def testUser(self):
+    def testUser(self):
         othserUser = self.user.getUser('@marley_ok')
         assert othserUser.friends_count>0
 
