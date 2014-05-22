@@ -10,6 +10,7 @@ class StdOutListener(tweepy.StreamListener):
    This is a basic listener that just prints received tweets to stdout.
    """
 	def on_data(self, data):
+		print "New data received" 
 		print data
 		return True
 	
@@ -18,13 +19,15 @@ class StdOutListener(tweepy.StreamListener):
 
 
 if __name__ == '__main__':
+	print "Authorizing with twitther oauth" 
+
 	l = StdOutListener()
 	auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 	auth.set_access_token(access_key, access_secret)
 	stream = tweepy.streaming.Stream(auth, l, timeout= 10)
 	print "Streaming started..."	
 	try:
-		stream.filter(track=['obama'])
+		stream.filter(track=['icardi'])
 	except:
 		print "error!"
 		stream.disconnect()
