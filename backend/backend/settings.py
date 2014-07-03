@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app',
+    'carson',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -84,3 +85,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+CONSUMER_KEY='4EGWhOlbKIp8SIXjP56kRdxy8'
+CONSUMER_SECRET='6j2XJDldCDFNfVM7Urr4Gddu2x1EJVxjSC9dRAdOd1r7KDfu0Z'
+TOKEN_KEY='2463917743-oUidchs8WJT6zEPtp0d6fZCsVCslpyUisthyyem'
+TOKEN_SECRET='feLQiY1bR3fOP85ZqNdZyI4h0fdmPJVkAybzbZvTg6408'
