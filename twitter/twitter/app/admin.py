@@ -2,8 +2,8 @@ from django.contrib import admin
 
 # Register your models here.
 
-from app.models import TweetUser
-from app.models import Tweet
+from twitter.app.models import TweetUser
+from twitter.app.models import Tweet
 
 class TweetUserAdmin(admin.ModelAdmin):
 	list_display = ('name','description')
