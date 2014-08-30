@@ -1,5 +1,5 @@
 """
-Django settings for backend project.
+Django settings for twitter project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.6/topics/settings/
@@ -17,7 +17,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '-dk@fv$!397v!lvy+^=l#bmwkohr$rfo1ki6k+#@i!s2u$@o(z'
+SECRET_KEY = 't*!b_6q8cq97md)y75s9o+1cd7#64j2+iug&hotu6zbw3e9z7h'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -36,7 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app',
+    'app'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -48,9 +48,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'backend.urls'
+ROOT_URLCONF = 'twitter.urls'
 
-WSGI_APPLICATION = 'backend.wsgi.application'
+WSGI_APPLICATION = 'twitter.wsgi.application'
 
 
 # Database
@@ -58,11 +58,8 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'tip_twitter',
-	'USER':'root',
-	'PASSWORD':'admin',
-	'HOST':'localhost'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -84,8 +81,3 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
-
-CONSUMER_KEY='4EGWhOlbKIp8SIXjP56kRdxy8'
-CONSUMER_SECRET='6j2XJDldCDFNfVM7Urr4Gddu2x1EJVxjSC9dRAdOd1r7KDfu0Z'
-TOKEN_KEY='2463917743-oUidchs8WJT6zEPtp0d6fZCsVCslpyUisthyyem'
-TOKEN_SECRET='feLQiY1bR3fOP85ZqNdZyI4h0fdmPJVkAybzbZvTg6408'

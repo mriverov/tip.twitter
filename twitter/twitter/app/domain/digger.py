@@ -1,8 +1,10 @@
 import tweepy
+import authenticator
 import stream
-from tweet_analizer.app.domain.authenticator import Authenticator
 
 class Digger:
+
+    
 
     def __init__(self, auth):
         self.auth = auth
@@ -19,8 +21,9 @@ class Digger:
         except Exception as e:
             print e
             stream.disconnect()
-         
+
+            
 if __name__ == "__main__":
-    a = Authenticator()
+    a = authenticator.Authenticator()
     d = Digger(a.authenticate())
     d.startStreaming()

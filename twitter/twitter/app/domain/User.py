@@ -2,10 +2,10 @@ import tweepy
 
 class UserRepository:
     
-    def __init__(self, auth):
+    __init__(self, auth):
         self.auth = auth
         self.repository = tweepy.API(self.auth)
 
-    def getUser(self, userName):
+    def getUser(userName):
         return self.repository.get_user(userName)
         

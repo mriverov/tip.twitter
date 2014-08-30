@@ -1,5 +1,9 @@
-from tweet_analizer.app.models import Tweet
+#import sys
+#sys.path.append('tip.twitter/backend/app')
+from twitter.app.models import Tweet
 
+
+#from tip.twitter.backend.app.models import *
 
 class TweetPersistor:
 
