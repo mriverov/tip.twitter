@@ -7,7 +7,7 @@ from twitter.app.models import Tweet
 
 class TweetPersistor:
 
-    def saveTweet(self, atext, _id):
-        tweet = Tweet(text= atext, tweetid=_id)
+    def saveTweet(self, atext, _id, user_id):
+        tweet = Tweet(text = atext, tweetid =_id, user = user_id)
         tweet.save()
         

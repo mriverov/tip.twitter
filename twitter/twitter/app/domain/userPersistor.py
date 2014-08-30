@@ -10,6 +10,6 @@ logger = logging.getLogger()
 class UserPersistor:
 
     def saveUser(self, aName, aDescription):
-        user = TweetUser(name= aName, description=aDescription)
+        user = TweetUser(name = aName, description = aDescription)
         user.save()
-        
+        return user

@@ -10,5 +10,5 @@ class TweetUser(models.Model):
 class Tweet(models.Model):
     text = models.CharField(max_length=5000, null=True, blank=True)
     tweetid = models.BigIntegerField(null=True, blank=True)
-    #user = models.ForeignKey('TweetUser') 
+    user = models.ForeignKey('TweetUser') 
 
