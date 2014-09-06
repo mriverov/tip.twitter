@@ -21,8 +21,8 @@ class Stream(tweepy.StreamListener):
             user_persistor = UserPersistor()
             user = user_persistor.saveUser(content['user']['name'], content['user']['description'])
             tweet = TweetPersistor()
+            print "Text: " + content['text']
             tweet.saveTweet(content['text'], content['id'], user)
-            print content
             print "--------------"
         return True
 

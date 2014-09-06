@@ -10,6 +10,14 @@ logger = logging.getLogger()
 class UserPersistor:
 
     def saveUser(self, aName, aDescription):
-        user = TweetUser(name = aName, description = aDescription)
+        _name = None
+        _description = None
+
+        if aName is not None:
+            _name = aName.encode('unicode_escape')
+        if aDescription is not None:
+            _description = aDescription.encode('unicode_escape')
+        
+        user = TweetUser(name = _name, description = _description)
         user.save()
         return user
