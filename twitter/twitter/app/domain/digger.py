@@ -4,8 +4,6 @@ import stream
 
 class Digger:
 
-    
-
     def __init__(self, auth):
         self.auth = auth
         self.digger = stream.Stream()
@@ -13,11 +11,12 @@ class Digger:
     def trackingKeys(self):
         return ['#obama']
 
-    def startStreaming(self):
+    def startStreaming(self):   
         stream = tweepy.streaming.Stream(self.auth, self.digger)
         print "Streaming started..."
         try:
             stream.filter(track=self.trackingKeys())
+            #stream.filter(follow=['38744894'])
         except Exception as e:
             print e
             stream.disconnect()

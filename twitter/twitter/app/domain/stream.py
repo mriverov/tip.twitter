@@ -12,17 +12,23 @@ class Stream(tweepy.StreamListener):
         self.buffer = ""
 
     def on_data(self, data):
-        logger.debug("New data arrived")
+        logger.info("New data arrived")
         print "-------------------"
         self.buffer += data
         if data.endswith("\r\n") and self.buffer.strip():
-            content = json.loads(self.buffer)
-            self.buffer = ""
+            content = json.loads(self.buffer)       
+            user_content = content['user']
             user_persistor = UserPersistor()
-            user = user_persistor.saveUser(content['user']['name'], content['user']['description'])
+            user = user_persistor.saveUser(user_content['id'],user_content['name'], user_content['screen_name'], user_content['description'], 
+                                           user_content['followers_count'], user_content['friends_count'], user_content['statuses_count'],
+                                           user_content['favourites_count'], user_content['location'], user_content['time_zone'],
+                                           user_content['created_at'])
+            
             tweet = TweetPersistor()
-            print "Text: " + content['text']
-            tweet.saveTweet(content['text'], content['id'], user)
+            tweet.saveTweet(content['id'], content['text'],content['favorite_count'], 
+                            content['retweet_count'], user)
+            
+            self.buffer = ""
             print "--------------"
         return True
 

@@ -6,11 +6,11 @@ from twitter.app.models import Tweet
 #from tip.twitter.backend.app.models import *
 
 class TweetPersistor:
-
-    def saveTweet(self, atext, _id, user_id):
+    #falta retweet_id
+    def saveTweet(self, _id, atext, _favorite_count,_retweet_count, user_id):
         _text = None        
         if atext is not None:
             _text = atext.encode('unicode_escape')
-        tweet = Tweet(text = _text, tweetid =_id, user = user_id)
+        tweet = Tweet(tweetid =_id, text = _text,favorite_count=_favorite_count ,retweet_count=_retweet_count, user = user_id)
         tweet.save()
         
