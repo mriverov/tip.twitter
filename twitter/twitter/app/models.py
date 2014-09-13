@@ -2,7 +2,16 @@ from django.db import models
 
 # Create your models here.
 
-class TweetUser(models.Model):
+class Domain(models.Model):
+	name = models.CharField(max_length=100, null=True, blank=True)
+
+class Topic(models.Model):
+	name = models.CharField(max_length=100, null=True, blank=True)
+	count = models.IntegerField(null=True, blank=True)
+	
+	domain = models.ForeignKey('Domain')
+
+class User(models.Model):
 	user_id = models.BigIntegerField(null=True, blank=True)
 	name = models.CharField(max_length=500, null=True, blank=True)
 	screen_name = models.CharField(max_length=500, null=True, blank=True)
@@ -19,11 +28,19 @@ class Tweet(models.Model):
 	tweetid = models.BigIntegerField(null=True, blank=True)
 	text = models.CharField(max_length=5000, null=True, blank=True)
 	favorite_count = models.IntegerField(null=True, blank=True)
-	#hashtags_id = models.ForeignKey('Hashtag') TBD
 	retweet_count = models.IntegerField(null=True, blank=True)
-	#retweet_id = models.IntegerField(null=True, blank=True) TBD
-	user = models.ForeignKey('TweetUser') 
+	retweet = models.OneToOneField('self')
+	
+	author = models.ForeignKey('User') 
+	topic = models.ForeignKey('Topic')
+	user_mentions = models.ManyToManyField(User, related_name='mentions')
 
 class Hashtag(models.Model):
-	text= models.CharField(max_length=100, null=True, blank=True)
+	name = models.CharField(max_length=100, null=True, blank=True)
+	count = models.IntegerField(null=True, blank=True)
+	
+	topic = models.ForeignKey('Topic')
+	tweets = models.ManyToManyField(Tweet, related_name='hashtags')
+
+
 
