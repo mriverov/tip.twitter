@@ -3,6 +3,8 @@ import logging
 import json
 from twitter.app.domain.userPersistor import UserPersistor
 from twitter.app.domain.tweetPersistor import TweetPersistor
+from twitter.app.domain.hashtagPersistor import HashtagPersistor
+from twitter.app.models import Topic
 
 logger = logging.getLogger()
 
@@ -16,21 +18,30 @@ class Stream(tweepy.StreamListener):
         print "-------------------"
         self.buffer += data
         if data.endswith("\r\n") and self.buffer.strip():
-            content = json.loads(self.buffer)       
+            content = json.loads(self.buffer)  
+            print data     
             user_content = content['user']
-            user_persistor = UserPersistor()
-            user = user_persistor.saveUser(user_content['id'],user_content['name'], user_content['screen_name'], user_content['description'], 
-                                           user_content['followers_count'], user_content['friends_count'], user_content['statuses_count'],
-                                           user_content['favourites_count'], user_content['location'], user_content['time_zone'],
-                                           user_content['created_at'])
             
-            tweet = TweetPersistor()
-            tweet.saveTweet(content['id'], content['text'],content['favorite_count'], 
-                            content['retweet_count'], user)
+            ########### User ##############
+            user_persistor = UserPersistor()
+            user = user_persistor.saveUser(user_content)
+            
+            ########## Tweet ##############
+            tweet_persistor = TweetPersistor()
+            tweet = tweet_persistor.saveTweet(content, self.getTopic(), user, user_persistor)
+            
+            ######### Hashtag #############
+            hastag_info = content['entities']['hashtags']
+            hashtag = HashtagPersistor()
+            hashtag.saveHashtag(hastag_info, self.getTopic(), tweet)
             
             self.buffer = ""
             print "--------------"
         return True
+    
+    def getTopic(self):
+        # se puede usar mientras tengamos un solo topico
+        return Topic.objects.get()
 
     def on_error(self, status):
         logger.error("Error status is %s " %  status )
