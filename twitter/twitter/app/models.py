@@ -7,7 +7,7 @@ class Domain(models.Model):
 
 class Topic(models.Model):
 	name = models.CharField(max_length=100, null=True, blank=True)
-	count = models.IntegerField(null=True, blank=True)
+	count = models.IntegerField(null=True, blank=True, default=0)
 	
 	domain = models.ForeignKey('Domain')
 
@@ -15,7 +15,7 @@ class User(models.Model):
 	user_id = models.BigIntegerField(null=True, blank=True)
 	name = models.CharField(max_length=500, null=True, blank=True)
 	screen_name = models.CharField(max_length=500, null=True, blank=True)
-	description = models.CharField(max_length=500, null=True, blank=True)
+	description = models.CharField(max_length=1000, null=True, blank=True)
 	followers_count = models.IntegerField(null=True, blank=True)
 	friends_count = models.IntegerField(null=True, blank=True)
 	statuses_count = models.IntegerField(null=True, blank=True)
@@ -29,18 +29,17 @@ class Tweet(models.Model):
 	text = models.CharField(max_length=5000, null=True, blank=True)
 	favorite_count = models.IntegerField(null=True, blank=True)
 	retweet_count = models.IntegerField(null=True, blank=True)
-	retweet = models.OneToOneField('self')
-	
+	retweet = models.ForeignKey('self', blank = True, null = True)
 	author = models.ForeignKey('User') 
 	topic = models.ForeignKey('Topic')
-	user_mentions = models.ManyToManyField(User, related_name='mentions')
+	user_mentions = models.ManyToManyField(User, related_name='mentions', blank = True, null = True)
 
 class Hashtag(models.Model):
 	name = models.CharField(max_length=100, null=True, blank=True)
-	count = models.IntegerField(null=True, blank=True)
+	count = models.IntegerField(null=True, blank=True, default = 0)
 	
 	topic = models.ForeignKey('Topic')
-	tweets = models.ManyToManyField(Tweet, related_name='hashtags')
+	tweets = models.ManyToManyField(Tweet, related_name='hashtags', blank = True, null = True)
 
 
 
