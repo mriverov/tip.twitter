@@ -8,7 +8,7 @@ class TweetPersistor:
         
         _tweet = self.getTweetObject(content, _topic, user)
         _user_mentions = user_persistor.getUserMention(content['entities']['user_mentions'])
-        _retweet = self.saveRetweet(content, _topic, user, user_persistor, _retweet_id, _tweet)
+        _retweet = self.saveRetweet(content, _topic, user, user_persistor, _retweet_id)
         
         _tweet.save()
         _tweet.retweet = _retweet
@@ -18,7 +18,7 @@ class TweetPersistor:
         
         return _tweet
     
-    def saveRetweet(self, content, _topic, user, user_persistor, _retweet_id, _tweet):
+    def saveRetweet(self, content, _topic, user, user_persistor, _retweet_id):
         _retweet = None
         if 'retweeted_status' in content:
             _retweeted_status = content['retweeted_status']
@@ -32,7 +32,7 @@ class TweetPersistor:
                     _retweet.retweet = None
                     _user_mention = user_persistor.getUserMention(_retweeted_status['entities']['user_mentions'])
                     if _user_mention is not None:
-                        _tweet.user_mentions.add(_user_mention)
+                        _retweet.user_mentions.add(_user_mention)
                     _retweet.save()
         return _retweet
 
