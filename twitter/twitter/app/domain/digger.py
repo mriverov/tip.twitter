@@ -27,7 +27,7 @@ class Digger:
             print e
             print "Finish Digger on " +time.strftime("%d/%m/%Y") + " at " +time.strftime("%H:%M:%S")
             self.end = datetime.datetime.now().replace(microsecond=0)
-            print "The streaming process was for" +self.end - self.start
+            print "The streaming process was for " +str(self.end - self.start)
             stream.disconnect()
     
     def getActualTopic(self):

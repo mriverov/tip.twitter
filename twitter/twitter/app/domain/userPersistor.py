@@ -7,6 +7,9 @@ from twitter.app.domain.searchEngineUser import SearchEngineUser
 logger = logging.getLogger()
 
 class UserPersistor:
+    
+    def __init__(self):
+        self.userEngine = SearchEngineUser()
 
     def saveUser(self, user_content):
         _id = user_content['id']
@@ -40,15 +43,17 @@ class UserPersistor:
                           friends_count = _friends_count , statuses_count = _statuses_count, favourites_count =_favourites_count, 
                           location = _location, time_zone = _time_zone, created_at=_created_at)
         user.save()
+        
+        
+        self.userEngine.processFollowersFrom(_id, _screen_name, self)
         return user
     
     def getUserMention(self, user_content):
-        userSearch = SearchEngineUser()
         user = None
         if user_content != []:
             id_info = user_content[0]
-            if id_info != []:
-                _user_mentions = userSearch.getUser(id_info['id'])
+            if id_info != [] and ('id' in id_info):
+                _user_mentions = self.userEngine.getUser(id_info['id'])
                 try:
                     user = User.objects.get(id = _user_mentions.id)
                 except User.DoesNotExist:
@@ -84,5 +89,9 @@ class UserPersistor:
                           location = _location, time_zone = _time_zone, created_at=_created_at)
         user.save()
         return user
-        
-
+    
+    def saveFollowersFrom(self, id_user, followers):
+        #Tenemos que activar tareas para traer cada usuario y persistorlo a la base, asociado al id_user
+        # la lista de followers son 5000 ids
+        # cada tarea deberia de persistir de a 300 usuarios, hay que ir probando
+        pass
