@@ -10,11 +10,14 @@ logger = logging.getLogger()
 
 class Stream(tweepy.StreamListener):
     
-    def __init__(self):
+    def __init__(self,max_data=100):
         self.buffer = ""
+	self.max_data = max_data
+	self.count = 0
 
     def on_data(self, data):
-        logger.info("New data arrived")
+        logger.info("New data arrived. Count is %d" % self.count)
+        self.count+=1
         print "-------------------"
         self.buffer += data
         if data.endswith("\r\n") and self.buffer.strip():
@@ -37,6 +40,8 @@ class Stream(tweepy.StreamListener):
             
             self.buffer = ""
             print "--------------"
+            if self.count >= self.max_data:
+                return False
         return True
     
     def getTopic(self):
