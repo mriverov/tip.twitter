@@ -23,6 +23,7 @@ class User(models.Model):
 	location = models.CharField(max_length=500, null=True, blank=True)
 	time_zone = models.CharField(max_length=500, null=True, blank=True)
 	created_at = models.DateTimeField(null=True, blank=True)
+	followers = models.ManyToManyField('self', related_name='followers', blank = True, null = True)
 	
 class Tweet(models.Model):
 	tweetid = models.BigIntegerField(null=True, blank=True)
