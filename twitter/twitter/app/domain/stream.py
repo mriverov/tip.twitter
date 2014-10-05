@@ -1,19 +1,20 @@
 import tweepy
 import logging
 import json
-from twitter.app.domain.userPersistor import UserPersistor
 from twitter.app.domain.tweetPersistor import TweetPersistor
 from twitter.app.domain.hashtagPersistor import HashtagPersistor
 from twitter.app.models import Topic
+from twitter.app.domain.userPersistor import UserPersistor
 
 logger = logging.getLogger()
+
 
 class Stream(tweepy.StreamListener):
     
     def __init__(self,max_data=100):
         self.buffer = ""
-	self.max_data = max_data
-	self.count = 0
+        self.max_data = max_data
+        self.count = 0
 
     def on_data(self, data):
         logger.info("New data arrived. Count is %d" % self.count)
@@ -32,6 +33,7 @@ class Stream(tweepy.StreamListener):
             ########## Tweet ##############
             tweet_persistor = TweetPersistor()
             tweet = tweet_persistor.saveTweet(content, self.getTopic(), user, user_persistor)
+            print "tweet"
             
             ######### Hashtag #############
             hastag_info = content['entities']['hashtags']

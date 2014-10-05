@@ -37,8 +37,8 @@ class Authenticator:
         r = requests.post(url=self.request_token_url, auth=oauth)
         credentials = parse_qs(r.content)
     
-        resource_owner_key = credentials.get('self.access_key')[0]
-        resource_owner_secret = credentials.get('self.access_secret')[0]
+        resource_owner_key = credentials.get('oauth_token')[0]
+        resource_owner_secret = credentials.get('oauth_token_secret')[0]
     
         # Authorize
         self.authorize_url = self.authorize_url + resource_owner_key
@@ -61,7 +61,7 @@ class Authenticator:
     
     
     def get_oauth(self):
-        self.setup_oauth()
+        #self.setup_oauth()
         oauth = oauth1_auth.OAuth1(self.consumer_key,
                     client_secret=self.consumer_secret,
                     resource_owner_key=self.access_key,

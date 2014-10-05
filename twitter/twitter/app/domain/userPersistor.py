@@ -3,6 +3,7 @@ from twitter.app.models import User
 from datetime import datetime
 from django.utils import timezone
 from twitter.app.domain.searchEngineUser import SearchEngineUser
+#from twitter.app import tasks
 
 logger = logging.getLogger()
 
@@ -44,8 +45,7 @@ class UserPersistor:
                           location = _location, time_zone = _time_zone, created_at=_created_at)
         user.save()
         
-        
-        self.userEngine.processFollowersFrom(_id, _screen_name, self)
+        self.userEngine.startFollowersTask(user, self)
         return user
     
     def getUserMention(self, user_content):
@@ -90,8 +90,4 @@ class UserPersistor:
         user.save()
         return user
     
-    def saveFollowersFrom(self, id_user, followers):
-        #Tenemos que activar tareas para traer cada usuario y persistorlo a la base, asociado al id_user
-        # la lista de followers son 5000 ids
-        # cada tarea deberia de persistir de a 300 usuarios, hay que ir probando
-        pass
+            
