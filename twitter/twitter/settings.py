@@ -36,7 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app'
+    'twitter.app'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -61,7 +61,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'twitter',
         'USER':'root',
-        'PASSWORD':'',
+        'PASSWORD':'admin',
         'HOST':'localhost'
     }
 }
