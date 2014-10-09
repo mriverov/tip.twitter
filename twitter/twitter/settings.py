@@ -39,6 +39,8 @@ INSTALLED_APPS = (
     'twitter.app'
 )
 
+CELERY_IMPORTS=("twitter.app.domain.tasks")
+
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
