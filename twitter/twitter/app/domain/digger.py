@@ -41,6 +41,6 @@ if __name__ == "__main__":
     print "Start Digger on " +time.strftime("%d/%m/%Y") + " at " +time.strftime("%H:%M:%S")
     a = Authenticator()
     d = Digger(a.authenticate())
-    d.topic.saveConfiguration("Deporte","premierLeague") 
+    d.topic.saveConfiguration("Politica","obama") 
     d.start = datetime.datetime.now().replace(microsecond=0)
     d.startStreaming()
