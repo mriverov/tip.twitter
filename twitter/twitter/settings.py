@@ -36,7 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'twitter.app'
+    'app'
 )
 
 CELERY_IMPORTS=("twitter.app.domain.tasks")
@@ -50,9 +50,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'twitter.urls'
+ROOT_URLCONF = 'urls'
 
-WSGI_APPLICATION = 'twitter.wsgi.application'
+WSGI_APPLICATION = 'wsgi.application'
 
 
 # Database
@@ -67,6 +67,17 @@ DATABASES = {
         'HOST':'localhost'
     }
 }
+
+TEMPLATE_DIRS = (
+   os.path.join(os.path.dirname(__file__),'../twitter/app/frontend/'),
+)
+
+STATICFILES_DIRS = (
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    os.path.join(os.path.dirname(__file__),'../twitter/static'),
+)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
