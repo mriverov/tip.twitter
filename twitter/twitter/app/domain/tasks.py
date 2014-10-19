@@ -4,6 +4,7 @@ import tweepy
 from celery import Celery
 from twitter.app.domain.followerPersistor import FollowerPersistor
 
+
 celery_app = Celery('tasks', broker='amqp://guest@localhost//')
 
 logger = logging.getLogger()
