@@ -1,7 +1,9 @@
 import requests
-
+import logging
 from twitter.app.models import User
 from twitter.app.domain.userEntityPersistor import UserEntityPersistor
+
+logger = logging.getLogger()
 
 class FollowerPersistor(UserEntityPersistor):
     
@@ -13,6 +15,7 @@ class FollowerPersistor(UserEntityPersistor):
         oauth = self.autenticator.get_oauth()
         api_path = "https://api.twitter.com/1.1/followers/list.json?screen_name=" + user.screen_name + "&count=200"
         if cursor != 0:
+            logger.info("Download followers of %s" %user.screen_name)
             url_with_cursor = api_path + "&cursor=" + str(cursor)
             response = requests.get(url=url_with_cursor, auth=oauth)
             response_dictionary = response.json()
@@ -24,11 +27,9 @@ class FollowerPersistor(UserEntityPersistor):
     def saveFollowers(self, user, followers):
         follower = None
         for follower_context in followers:
-            print "saving user "+ str(follower_context['screen_name'])
             try:
                 follower = User.objects.get(user_id = follower_context['id'])
             except User.DoesNotExist:
                 follower = self.saveUserWithoutFollowers(follower_context)
             user.followers.add(follower)
-            print "finishing saving user "+ str(follower_context['screen_name'])
         user.save()

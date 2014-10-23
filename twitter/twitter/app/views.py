@@ -1,6 +1,9 @@
 from django.http import HttpResponse
 from django.shortcuts import render, render_to_response
-#from django.core.context_processors import csrf
+
+from twitter.app.domain.diggerService import DiggerService
+
+diggerService = DiggerService()
 
 def hello(request):
     return HttpResponse("Hello world")
@@ -12,6 +15,6 @@ def getHome(request):
 
 def newProject(request):
     domain = request.POST['project']
-      
+    diggerService.startDiggerNow(domain)
 
     return render_to_response('configuration.html', {'domain':domain})

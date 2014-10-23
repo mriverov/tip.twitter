@@ -1,9 +1,11 @@
 import tweepy
 import stream
-import time
-import datetime
-from twitter.app.domain.authenticator import Authenticator
+import logging
+
+#from twitter.app.domain.authenticator import Authenticator
 from twitter.app.domain.topicConfiguration import TopicConfiguration
+
+logger = logging.getLogger()
 
 class Digger:
 
@@ -11,23 +13,18 @@ class Digger:
         self.auth = auth
         self.digger = stream.Stream()
         self.topic = TopicConfiguration()
-        self.start = None
-        self.end = None
 
     def trackingKeys(self):
         return self.getActualTopic()
 
-    def startStreaming(self):   
+    def startStreaming(self, key):   
         stream = tweepy.streaming.Stream(self.auth, self.digger)
-        print "Streaming started..."
+        logger.info("Start streaming from key: %s" %key) 
         try:
-            stream.filter(track=self.trackingKeys())
-            #stream.filter(follow=['38744894'])
+            stream.filter(track=key)
         except Exception as e:
             print e
-            print "Finish Digger on " +time.strftime("%d/%m/%Y") + " at " +time.strftime("%H:%M:%S")
-            self.end = datetime.datetime.now().replace(microsecond=0)
-            print "The streaming process was for " +str(self.end - self.start)
+            logger.info("Finish Digger from key: %s" %key)
             stream.disconnect()
     
     def getActualTopic(self):
@@ -35,12 +32,10 @@ class Digger:
         key.append(self.topic.getTopicLikeHashtag())
         return key
         
-
             
-if __name__ == "__main__":
+'''if __name__ == "__main__":
     print "Start Digger on " +time.strftime("%d/%m/%Y") + " at " +time.strftime("%H:%M:%S")
     a = Authenticator()
     d = Digger(a.authenticate())
     d.topic.saveConfiguration("Politica","obama") 
-    d.start = datetime.datetime.now().replace(microsecond=0)
-    d.startStreaming()
+    d.startStreaming()'''

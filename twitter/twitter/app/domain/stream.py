@@ -43,6 +43,7 @@ class Stream(tweepy.StreamListener):
             self.buffer = ""
             print "--------------"
             if self.count >= self.max_data:
+                logger.info("Count: %d > max_data: %d" % self.count, self.max_data)
                 return False
         return True
     
