@@ -1,18 +1,14 @@
 import tweepy
-import stream
 import logging
-
-#from twitter.app.domain.authenticator import Authenticator
-from twitter.app.domain.topicConfiguration import TopicConfiguration
 
 logger = logging.getLogger()
 
 class Digger:
 
-    def __init__(self, auth):
+    def __init__(self, auth,stream,topic):
         self.auth = auth
-        self.digger = stream.Stream()
-        self.topic = TopicConfiguration()
+        self.digger = stream
+        self.topic = topic
 
     def trackingKeys(self):
         return self.getActualTopic()

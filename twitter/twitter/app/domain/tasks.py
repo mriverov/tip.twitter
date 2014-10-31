@@ -4,6 +4,9 @@ import tweepy
 from celery import Celery
 from twitter.app.domain.authenticator import Authenticator
 from twitter.app.domain.digger import Digger
+from twitter.app.domain.stream import Stream
+from twitter.app.domain.topicConfiguration import TopicConfiguration
+
 from twitter.app.domain.followerPersistor import FollowerPersistor
 
 celery_app = Celery('tasks', broker='amqp://guest@localhost//')
@@ -27,7 +30,9 @@ def processFollowers(self, user, cursor):
 @celery_app.task(bind=True)
 def startDigger(self, key):
 	a = Authenticator()
-	d = Digger(a.authenticate())
+	stream = Stream(processFollowers=processFollowers)
+	topic = TopicConfiguration()
+	d = Digger(a.authenticate(), stream, topic)
 	d.startStreaming(key)
 
 

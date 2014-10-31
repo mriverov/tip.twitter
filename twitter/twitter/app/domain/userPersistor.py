@@ -1,7 +1,8 @@
 import tweepy
 import logging
 
-from twitter.app.domain.tasks import processFollowers
+#from twitter.app.domain.tasks import processFollowers
+
 from twitter.app.domain.userEntityPersistor import UserEntityPersistor
 
 logger = logging.getLogger()
@@ -25,7 +26,8 @@ class UserPersistor(UserEntityPersistor):
     
     def saveUser(self, user_content):
         user = self.saveUserWithoutFollowers(user_content)
-        processFollowers.delay(user=user, cursor=-1)
+        #processFollowers.delay(user=user, cursor=-1)
+	# LO SACO DE ACA YA QUE NO ME GUSTA. SE ESTAN CRUZANDO TODAS LAS CAPAS
         
         return user
     

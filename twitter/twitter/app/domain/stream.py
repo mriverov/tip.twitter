@@ -8,10 +8,12 @@ from twitter.app.domain.userPersistor import UserPersistor
 
 logger = logging.getLogger()
 
+def processFollowers():
+	pass
 
 class Stream(tweepy.StreamListener):
     
-    def __init__(self,max_data=100):
+    def __init__(self,max_data=100, processFollowers=processFollowers):
         self.buffer = ""
         self.max_data = max_data
         self.count = 0
@@ -29,7 +31,7 @@ class Stream(tweepy.StreamListener):
             ########### User ##############
             user_persistor = UserPersistor()
             user = user_persistor.saveUser(user_content)
-            
+            processFollowers.delay(user=user, cursor=-1)    
             ########## Tweet ##############
             tweet_persistor = TweetPersistor()
             tweet = tweet_persistor.saveTweet(content, self.getTopic(), user, user_persistor)

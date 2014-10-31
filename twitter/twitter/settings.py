@@ -61,9 +61,9 @@ WSGI_APPLICATION = 'wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'twitter',
-        'USER':'root',
-        'PASSWORD':'admin',
+        'NAME': 'tip_twitter',
+        'USER':'tip_twitter',
+        'PASSWORD':'tip_twitter',
         'HOST':'localhost'
     }
 }
