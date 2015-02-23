@@ -1,9 +1,12 @@
-from twitter.app.models import Topic
-from twitter.app.models import Domain
+from app.models import Domain, Topic
+
 
 class TopicConfiguration:
 
-    def saveConfiguration(self, dom, topic):
+    def __init__(self):
+        pass
+
+    def save_configuration(self, dom, topic):
         try:
             Domain.objects.get(name=dom)
         except Domain.DoesNotExist:
@@ -16,17 +19,17 @@ class TopicConfiguration:
             _topic = Topic(name=topic, domain=_domain)
             _topic.save() 
         
-    def getTopicLikeHashtag(self):
+    def get_topic_like_hashtag(self):
         return "#"+str(self.getTopic())
     
-    def getTopicLikeMention(self):
+    def get_topic_like_mention(self):
         return "@"+str(self.getTopic())
     
-    def getTopicLikeWord(self):
+    def get_topic_like_word(self):
         return str(self.getTopic())
         
-    def getTopic(self):
-        #por ahora porque solo tenemos uno
+    def get_topic(self):
+        # por ahora porque solo tenemos uno
         topic = Topic.objects.get()
         return topic.name
     

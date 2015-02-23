@@ -36,10 +36,11 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'twitter.app'
+    'djcelery',
+    'app'
 )
 
-CELERY_IMPORTS=("twitter.app.domain.tasks")
+CELERY_IMPORTS = "app.domain.tasks"
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -47,7 +48,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware'
 )
 
 ROOT_URLCONF = 'urls'
@@ -62,25 +63,32 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'tip_twitter',
-        'USER':'tip_twitter',
-        'PASSWORD':'tip_twitter',
-        'HOST':'localhost'
+        'USER': 'tip_twitter',
+        'PASSWORD': 'tip_twitter',
+        'HOST': 'localhost'
     }
 }
 
-TEMPLATE_DIRS = (
-   os.path.join(os.path.dirname(__file__),'../twitter/app/frontend/'),
-)
+TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), '../twitter/app/frontend/'),)
 
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    os.path.join(os.path.dirname(__file__),'../twitter/static'),
+    os.path.join(os.path.dirname(__file__), '../twitter/static'),
 )
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
+
+# Django celery
+import djcelery
+djcelery.setup_loader()
+
+
+CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
+# 'db+mysql://tip_twitter:tip_twitter@localhost:3306/tip_twitter',
 
 LANGUAGE_CODE = 'en-us'
 

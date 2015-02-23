@@ -8,9 +8,9 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-	<link rel="shortcut icon" href="{% static 'bootstrap-3.2.0-dist/image/digger.ico' %}" />
+	<link href="{% static 'bootstrap-3.2.0-dist/image/digger.ico' %}" rel="shortcut icon"/>
     <title>TwiDigger</title>
-    <link href="{% static 'bootstrap-3.2.0-dist/css/bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'bootstrap-3.2.0-dist/css/bootstrap.css' %}" rel="stylesheet"/>
 	    
   </head>
 
@@ -48,8 +48,8 @@
             </div>
         	<div class="col-xs-12 col-sm-9" >
         	    <div class="pull-bottom">
-        			<h1> <strong> Configurate your Digger </strong> </h1>
-        			<h4 class="text-info" >Project name: {{domain}}</h4>
+        			<h1><strong>Thank you for use Mole!</strong></h1>
+        			<h4 class="text-info" >Your project have been save for: {{keyword}}</h4>
         		</div>
         	</div>
         </div>
@@ -58,35 +58,7 @@
       <div id="carbonads-container"><div class="carbonad"><div id="azcarbon"></div></div></div>
     </div>
     
-    <div class="span8">
-    <div class="container">
-    	<div class="row">
-    		<div class="col-xs-6 col-sm-3">
-			     <form role="form" action="/start_digger/" method="post" > {% csrf_token %}
-			        <div class="form-group">
-			          <label for="keyword">Keyword</label>
-			          <input type="text" class="form-control" id="keyword" name="keyword" placeholder="Keyword">
-			        </div>
-			        
-			        <div class="form-group">
-			          <label for="mention">Mention</label>
-			          <input type="text" class="form-control" id="mention" name="mention" placeholder="@mention">
-			        </div>
-			        
-			        <div class="form-group">
-			          <label for="hashtag">Hashtag</label>
-			          <input type="text" class="form-control" id="hashtag" name="hashtag" placeholder="#hashtag">
-			        </div>
-			        
-			
-				    <div class="form-group">
-				      <input type="submit" class="btn btn-info" value="Save" />
-				    </div>
-				</form>
-			</div>
-		</div>
-	</div>
-	</div>
+
     
    
     <!-- Placed at the end of the document so the pages load faster -->

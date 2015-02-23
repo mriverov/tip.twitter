@@ -1,20 +1,20 @@
-from twitter.app.models import Hashtag
+from app.models import Hashtag
+
 
 class HashtagPersistor:
     
-    def saveHashtag(self,hashtag_info, _topic, tweet):
-        hashtag = hashtag_info[0]
-        if hashtag!=[]:
-            if 'text' in hashtag:
-                _name = hashtag['text']
+    def __init__(self):
+        pass
+
+    @staticmethod
+    def save_hashtag(hashtag, _topic, tweet):
+        hashtag_list = hashtag[0]
+        if hashtag_list:
+            if 'text' in hashtag_list:
+                _name = hashtag_list['text']
                 if _name is not None:
                     _name = _name.encode('unicode_escape')
-                # TODO
-                # count
-                hashtag = Hashtag(name = _name, topic = _topic)
-                hashtag.save()
-                hashtag.tweets.add(tweet)
-                hashtag.save()
-            
-        
-    
+                hashtag_list = Hashtag(name=_name, topic=_topic)
+                hashtag_list.save()
+                hashtag_list.tweets.add(tweet)
+                hashtag_list.save()

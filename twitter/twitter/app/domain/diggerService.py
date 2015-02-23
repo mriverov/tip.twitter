@@ -1,11 +1,16 @@
+from app.domain import tasks
 
-from twitter.app.domain.tasks import startDigger
 
 class DiggerService:
     
-    def startDiggerNow(self, _key):
-        startDigger.delay(key=_key)
-        
-    def startDiggerLater(self, _key, date):
-        startDigger.apply_async(key=_key, eta=date)
-        
+    def __init__(self):
+        pass
+
+    @staticmethod
+    def start_digger_now(domain, keyword):
+        tasks.start_digger.delay(domain, keyword)
+
+    @staticmethod
+    def start_digger_later(_key, date):
+        # tasks.start_digger.apply_async(_key, cursor=-1, eta=date)
+        pass
