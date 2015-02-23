@@ -1,8 +1,12 @@
+import time
 import tweepy
 import logging
+from app.domain.authenticator import Authenticator
+from app.domain.stream import Stream
+from app.domain.topicConfiguration import TopicConfiguration
 
 
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 
 
 class Digger:
@@ -21,7 +25,7 @@ class Digger:
         try:
             stream.filter(track=key)
         except Exception as e:
-            print e
+            logger.error(e)
             logger.info("Finish Digger from key: %s" % key)
             stream.disconnect()
     
@@ -29,8 +33,11 @@ class Digger:
         return [self.topic.get_topic_like_hashtag()]
 
 '''if __name__ == "__main__":
-    print "Start Digger on " +time.strftime("%d/%m/%Y") + " at " +time.strftime("%H:%M:%S")
+    print "Start Digger on " + time.strftime("%d/%m/%Y") + " at " + time.strftime("%H:%M:%S")
     a = Authenticator()
-    d = Digger(a.authenticate())
-    d.topic.saveConfiguration("Politica","obama") 
-    d.startStreaming()'''
+    stream = Stream()
+    topic_conf = TopicConfiguration()
+    topic_conf.save_configuration("Barcelona", "malaga")
+    digger = Digger(a.authenticate(), stream, topic_conf)
+    digger.start_streaming("malaga")
+'''

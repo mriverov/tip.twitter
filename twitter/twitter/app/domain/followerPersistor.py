@@ -3,7 +3,7 @@ import logging
 from app.models import User
 from app.domain.userEntityPersistor import UserEntityPersistor
 
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 
 
 class FollowerPersistor(UserEntityPersistor):

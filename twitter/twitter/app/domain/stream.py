@@ -9,7 +9,7 @@ from app.domain.userPersistor import UserPersistor
 
 # from twitter.app.domain.tasks import processFollowers
 
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 
 
 class Stream(tweepy.StreamListener):
@@ -27,25 +27,25 @@ class Stream(tweepy.StreamListener):
         self.buffer += data
         if data.endswith("\r\n") and self.buffer.strip():
             content = json.loads(self.buffer)
-            print data
+            logger.info(data)
             user_content = content['user']
 
             ########### User ##############
             user_persistor = UserPersistor()
+            logger.info("User has been save successfully")
             user = user_persistor.save_user(user_content)
             #tasks.process_followers.delay(user=user, cursor=self.cursor)
             ########## Tweet ##############
             tweet_persistor = TweetPersistor()
             tweet = tweet_persistor.save_tweet(content, self.get_topic(), user, user_persistor)
-            print "tweet"
-
+            logger.info("Tweet has been save successfully")
             ######### Hashtag #############
             hashtag_info = content['entities']['hashtags']
             hashtag = HashtagPersistor()
             hashtag.save_hashtag(hashtag_info, self.get_topic(), tweet)
-
+            logger.info("Hashtag has been save successfully")
             self.buffer = ""
-            print "--------------"
+            logger.info("--------------")
             if self.count >= self.max_data:
                 logger.info("Count: %d > max_data: %d" % self.count, self.max_data)
                 return False
