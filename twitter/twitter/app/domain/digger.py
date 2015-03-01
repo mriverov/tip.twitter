@@ -4,6 +4,7 @@ import logging
 from app.domain.authenticator import Authenticator
 from app.domain.stream import Stream
 from app.domain.topicConfiguration import TopicConfiguration
+from app.exception.twitterExceptionHandler import TwitterExceptionHandler
 
 
 logger = logging.getLogger(__name__)
@@ -15,6 +16,7 @@ class Digger:
         self.auth = auth
         self.digger = stream
         self.topic = topic
+        self.exception_handlder = TwitterExceptionHandler()
 
     def tracking_keys(self):
         return self.get_actual_topic()
@@ -24,20 +26,17 @@ class Digger:
         logger.info("Start streaming from key: %s" % key)
         try:
             stream.filter(track=key)
-        except Exception as e:
-            logger.error(e)
+        except tweepy.TweepError as e:
+            logger.info("Es un error de twitter")
+            raise e
+        except Exception as inst:
+            logger.error(inst.message)
+            logger.error(inst)
             logger.info("Finish Digger from key: %s" % key)
             stream.disconnect()
-    
+
+    def reset(self):
+        self.digger.reset_count()
+
     def get_actual_topic(self):
         return [self.topic.get_topic_like_hashtag()]
-
-'''if __name__ == "__main__":
-    print "Start Digger on " + time.strftime("%d/%m/%Y") + " at " + time.strftime("%H:%M:%S")
-    a = Authenticator()
-    stream = Stream()
-    topic_conf = TopicConfiguration()
-    topic_conf.save_configuration("Barcelona", "malaga")
-    digger = Digger(a.authenticate(), stream, topic_conf)
-    digger.start_streaming("malaga")
-'''

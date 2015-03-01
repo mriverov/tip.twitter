@@ -36,7 +36,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'djcelery',
     'app'
 )
 
@@ -83,11 +82,11 @@ STATICFILES_DIRS = (
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
 # Django celery
-import djcelery
-djcelery.setup_loader()
+# import djcelery
+# djcelery.setup_loader()
 
 
-CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
+# CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
 # 'db+mysql://tip_twitter:tip_twitter@localhost:3306/tip_twitter',
 
 LANGUAGE_CODE = 'en-us'

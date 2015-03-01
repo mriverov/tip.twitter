@@ -2,7 +2,7 @@ import tweepy
 import logging
 from app.domain.userEntityPersistor import UserEntityPersistor
 
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 
 
 class UserPersistor(UserEntityPersistor):
@@ -12,10 +12,20 @@ class UserPersistor(UserEntityPersistor):
         self.api = tweepy.API(self.auth)
 
     def get_user_from_api(self, _id):
-        api = tweepy.API(self.auth)
-        return api.get_user(_id)
+        # api = tweepy.API(self.auth)
+        """
+
+        :param _id:
+        :return:
+        """
+        return self.api.get_user(_id)
 
     def save_user_from_api(self, user):
+        """
+
+        :param user:
+        :return:
+        """
         saved_user = self.validate_and_save(user.id, user.name, user.screen_name, user.description,
                                             user.followers_count,
                                             user.friends_count, user.statuses_count,
@@ -32,10 +42,15 @@ class UserPersistor(UserEntityPersistor):
         return user
 
     def get_user_mention(self, user_content):
+        """
+
+        :param user_content:
+        :return:
+        """
         user = None
         if user_content:
             id_info = user_content[0]
             if id_info != [] and ('id' in id_info):
-                _user_mentions = self.get_user_from_api(id_info['id'])
-                user = self.get_user_from_api(_user_mentions)
+                user = self.get_user_from_api(id_info['id'])
+                user = self.save_user_from_api(user)
         return user

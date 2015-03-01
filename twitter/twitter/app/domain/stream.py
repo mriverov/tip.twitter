@@ -13,41 +13,56 @@ logger = logging.getLogger(__name__)
 
 
 class Stream(tweepy.StreamListener):
-
-    def __init__(self, max_data=100):
+    def __init__(self, max_data=30):
         self.buffer = ""
         self.max_data = max_data
         self.count = 0
         self.cursor = -1
 
+    def load_from_buffer(self):
+        info = None
+        try:
+            info = json.loads(self.buffer)
+        except ValueError as err:
+            logger.error(err)
+            logger.error(err.message)
+            logger.error("Se rompio json")
+            self.buffer = ""
+            raise err
+        return info
+
     def on_data(self, data):
         logger.info("New data arrived. Count is %d" % self.count)
         self.count += 1
         print "-------------------"
+        logger.info("Count is %d" % self.count)
         self.buffer += data
         if data.endswith("\r\n") and self.buffer.strip():
-            content = json.loads(self.buffer)
+            content = self.load_from_buffer()
             logger.info(data)
             user_content = content['user']
-
-            ########### User ##############
+            # ########## User ##############
             user_persistor = UserPersistor()
-            logger.info("User has been save successfully")
+            logger.info("Start saving User")
             user = user_persistor.save_user(user_content)
-            #tasks.process_followers.delay(user=user, cursor=self.cursor)
-            ########## Tweet ##############
+            logger.info("User has been save successfully")
+            # tasks.process_followers.delay(user=user, cursor=self.cursor)
+            # ######### Tweet ##############
             tweet_persistor = TweetPersistor()
+            logger.info("Start saving Tweet")
             tweet = tweet_persistor.save_tweet(content, self.get_topic(), user, user_persistor)
             logger.info("Tweet has been save successfully")
-            ######### Hashtag #############
+            # ######## Hashtag #############
             hashtag_info = content['entities']['hashtags']
             hashtag = HashtagPersistor()
+            logger.info("Start saving Hashtag")
             hashtag.save_hashtag(hashtag_info, self.get_topic(), tweet)
             logger.info("Hashtag has been save successfully")
             self.buffer = ""
             logger.info("--------------")
+            logger.info("Count is %d" % self.count)
             if self.count >= self.max_data:
-                logger.info("Count: %d > max_data: %d" % self.count, self.max_data)
+                logger.info("Count: " + str(self.count) + "> max_data: " + str(self.max_data))
                 return False
         return True
 
@@ -58,3 +73,6 @@ class Stream(tweepy.StreamListener):
 
     def on_error(self, status):
         logger.error("Error status is %s " % status)
+
+    def reset_count(self):
+        self.count = 0

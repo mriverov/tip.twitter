@@ -1,4 +1,7 @@
+import logging
 from app.models import Tweet
+
+logger = logging.getLogger(__name__)
 
 
 class TweetPersistor:
@@ -10,13 +13,11 @@ class TweetPersistor:
         tweet = self.get_tweet_object(content, _topic, user)
         user_mentions = user_persistor.get_user_mention(content['entities']['user_mentions'])
         retweet = self.save_retweet(content, _topic, user_persistor)
-        
         tweet.save()
         tweet.retweet = retweet
         if user_mentions is not None:
             tweet.user_mentions.add(user_mentions)
         tweet.save()
-        
         return tweet
     
     def save_retweet(self, content, _topic, user_persistor):
