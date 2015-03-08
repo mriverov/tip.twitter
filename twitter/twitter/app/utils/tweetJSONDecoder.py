@@ -16,12 +16,9 @@ class TweetJSONDecoder:
         try:
             info = [json.loads(content)]
         except ValueError as err:
-            logger.error(err)
             logger.error(err.message)
-            logger.error("Se rompio json")
             logger.error(content)
             info = self.decode_multiple_json(content)
-            logger.error("Se decodifico json")
             logger.error(str(info))
         return info
 
@@ -29,7 +26,6 @@ class TweetJSONDecoder:
         final_tweet_data = []
         json_tweet = json_data.split('\n')
         logger.info(json_tweet)
-        logger.info(" AAAAAAAAAAAAAAAAAHgg")
         for elem in json_tweet:
             decode_data = elem.encode('unicode_escape')
             if self.is_valid_data(decode_data):
