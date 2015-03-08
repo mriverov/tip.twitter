@@ -1,9 +1,5 @@
-import time
 import tweepy
 import logging
-from app.domain.authenticator import Authenticator
-from app.domain.stream import Stream
-from app.domain.topicConfiguration import TopicConfiguration
 from app.exception.twitterExceptionHandler import TwitterExceptionHandler
 
 

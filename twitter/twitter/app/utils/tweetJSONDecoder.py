@@ -29,9 +29,9 @@ class TweetJSONDecoder:
         final_tweet_data = []
         json_tweet = json_data.split('\n')
         logger.info(json_tweet)
-        logger.info(" AAAAAAAAAAAAAAAAAH")
+        logger.info(" AAAAAAAAAAAAAAAAAHgg")
         for elem in json_tweet:
-            decode_data = elem.encode('utf-8')
+            decode_data = elem.encode('unicode_escape')
             if self.is_valid_data(decode_data):
                 final_tweet_data.append(json.loads(elem))
         logger.info(str(final_tweet_data))

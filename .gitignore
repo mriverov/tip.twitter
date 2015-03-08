@@ -1,4 +1,5 @@
 *~
 *.pyc
 keys.cfg
-.idea
+.idea/
+*.log

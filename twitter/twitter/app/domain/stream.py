@@ -31,6 +31,7 @@ class Stream(tweepy.StreamListener):
         self.count += 1
         print "-------------------"
         logger.info("Count is %d" % self.count)
+        self.buffer = ""
         self.buffer += data
         if data.endswith("\r\n") and self.buffer.strip():
             tweet_data = self.load_from_buffer
@@ -54,7 +55,6 @@ class Stream(tweepy.StreamListener):
                 logger.info("Start saving Hashtag")
                 hashtag.save_hashtag(hashtag_info, self.get_topic(), tweet)
                 logger.info("Hashtag has been save successfully")
-            self.buffer = ""
             logger.info("--------------")
             logger.info("Count is %d" % self.count)
             if self.count >= self.max_data:
