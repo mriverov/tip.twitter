@@ -59,8 +59,7 @@ def start_streaming(self, digger, topic):
             logger.error(tweepy.TweepError)
             logger.info("Information not found ")
             raise self.retry(exc=e, countdown=1)
-        logger.info("Si llego hasta aca es porque no agarro por ningun error ade twitter anterior")
-        logger.error(e.message)
+        exception_handlder.is_general_tweet_limit_exception(tweepy.TweepError)
     except Exception as inst:
         if exception_handlder.is_range_limit_outh_exception(inst.message):
             logger.error(inst)
