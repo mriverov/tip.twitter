@@ -56,20 +56,20 @@ def start_streaming(self, digger, topic, **kwargs):
                 e.message):
             logger.info("Waiting to try again")
             # raise self.retry(exc=e, countdown=10)
-            self.retry(args=[digger, topic], exc=e, countdown=10, kwargs=kwargs)
+            self.retry(args=[digger, topic], exc=e, countdown=10, **kwargs)
         if exception_handlder.page_does_not_exist(e.message):
             logger.info("Information not found ")
             # raise self.retry(exc=e, countdown=10)
-            self.retry(args=[digger, topic], exc=e, countdown=10, kwargs=kwargs)
+            self.retry(args=[digger, topic], exc=e, countdown=10, **kwargs)
         if exception_handlder.is_range_limit_outh_exception(e.message):
             logger.error("Error limit 414 from twitter has been stoped the streaming, waiting for permission ")
             # raise self.retry(exc=e, countdown=10)
-            self.retry(args=[digger, topic], exc=e, countdown=10, kwargs=kwargs)
+            self.retry(args=[digger, topic], exc=e, countdown=10, **kwargs)
         if exception_handlder.is_range_limit_exception(e.message):
             logger.error("Error limit 420 from twitter has been stoped the streaming, waiting for restart limit ")
-            self.retry(args=[digger, topic], exc=e, countdown=10, kwargs=kwargs)
+            self.retry(args=[digger, topic], exc=e, countdown=10, **kwargs)
 
         logger.info("Si llego hasta aca es porque no agarro por ningun error anterior")
-        self.retry(args=[digger, topic], exc=e, countdown=10, kwargs=kwargs)
+        self.retry(args=[digger, topic], exc=e, countdown=10, **kwargs)
     digger.reset()
     start_streaming(digger, topic)

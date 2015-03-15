@@ -49,6 +49,7 @@ class TwitterExceptionHandler:
     def is_exception_of(self, expression, exception_key):
         logger.error(expression)
         logger.error(exception_key)
+        value = expression
         if type(expression) == type(list()):
             value = expression[0]
 
