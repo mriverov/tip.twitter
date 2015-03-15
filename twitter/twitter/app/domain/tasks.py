@@ -31,17 +31,17 @@ def process_followers(self, user, cursor):
 
 
 # @celery_app.task(bind=True)
-def start_digger(dominio, topic):
+def start_digger(dominio, keyword, mention, hashtag):
     """
 
     :rtype : digger
     """
-    logging.info("Digger configuration for domain: " + dominio + "and topic " + topic)
+    logging.info("Digger configuration for domain: " + dominio + "and topic " + keyword)
     a = Authenticator()
     stream = Stream()
     topic_conf = TopicConfiguration()
-    topic_conf.save_configuration(dominio, topic)
-    digger = Digger(a.authenticate(), stream, topic_conf)
+    topic_conf.save_configuration(dominio, keyword, mention, hashtag)
+    digger = Digger(a.authenticate(), stream)
     return digger
 
 

@@ -7,9 +7,11 @@ class DiggerService:
         pass
 
     @staticmethod
-    def start_digger_now(domain, keyword):
-        digger = tasks.start_digger(domain, keyword)
+    def start_digger_now(domain, keyword, mention, hashtag):
+        digger = tasks.start_digger(domain, keyword, mention, hashtag)
         tasks.start_streaming.delay(digger, keyword)
+        tasks.start_streaming.delay(digger, mention)
+        tasks.start_streaming.delay(digger, hashtag)
 
     @staticmethod
     def start_digger_later(_key, date):

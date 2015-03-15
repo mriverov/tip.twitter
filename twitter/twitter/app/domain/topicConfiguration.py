@@ -6,9 +6,10 @@ class TopicConfiguration:
     def __init__(self):
         pass
 
-    def save_configuration(self, dom, topic):
+    @staticmethod
+    def save_configuration(dom, topic, mention, hashtag):
         try:
-            Domain.objects.get(name=dom)
+            _domain = Domain.objects.get(name=dom)
         except Domain.DoesNotExist:
             _domain = Domain(name=dom)
             _domain.save()
@@ -17,21 +18,16 @@ class TopicConfiguration:
             Topic.objects.get(name=topic)
         except Topic.DoesNotExist:
             _topic = Topic(name=topic, domain=_domain)
-            _topic.save() 
-        
-    def get_topic_like_hashtag(self):
-        return "#"+str(self.getTopic())
-    
-    def get_topic_like_mention(self):
-        return "@"+str(self.getTopic())
-    
-    def get_topic_like_word(self):
-        return str(self.getTopic())
-        
-    def get_topic(self):
-        # por ahora porque solo tenemos uno
-        topic = Topic.objects.get()
-        return topic.name
-    
-    
+            _topic.save()
 
+        try:
+            Topic.objects.get(name=mention)
+        except Topic.DoesNotExist:
+            _topic = Topic(name=mention, domain=_domain)
+            _topic.save()
+
+        try:
+            Topic.objects.get(name=hashtag)
+        except Topic.DoesNotExist:
+            _topic = Topic(name=hashtag, domain=_domain)
+            _topic.save()

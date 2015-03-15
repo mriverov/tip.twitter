@@ -20,6 +20,7 @@ class Stream(tweepy.StreamListener):
         self.max_data = max_data
         self.count = 0
         self.cursor = -1
+        self.topic = None
         self.multiple_decoder = TweetJSONDecoder()
 
     @property
@@ -63,10 +64,8 @@ class Stream(tweepy.StreamListener):
                 return False
         return True
 
-    @staticmethod
-    def get_topic():
-        # se puede usar mientras tengamos un solo topico
-        return Topic.objects.get()
+    def set_topic(self, _topic):
+        self.topic = _topic
 
     def on_error(self, status):
         logger.error("Error status is %s " % status)
@@ -74,3 +73,6 @@ class Stream(tweepy.StreamListener):
 
     def reset_count(self):
         self.count = 0
+
+    def get_topic(self):
+        return Topic.objects.get(name=self.topic)
