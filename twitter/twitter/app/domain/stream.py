@@ -36,6 +36,7 @@ class Stream(tweepy.StreamListener):
         if data.endswith("\r\n") and self.buffer.strip():
             tweet_data = self.load_from_buffer
             for content in tweet_data:
+                logger.info("Start saving information")
                 logger.info(content)
                 user_content = content['user']
                 # ########## User ##############

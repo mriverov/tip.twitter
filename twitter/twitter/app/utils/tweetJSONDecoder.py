@@ -1,5 +1,7 @@
 import logging
 import json
+import tweepy
+from app.exception.twitterExceptionHandler import TwitterExceptionHandler
 
 
 __author__ = 'Marina'
@@ -10,11 +12,15 @@ logger = logging.getLogger(__name__)
 class TweetJSONDecoder:
 
     def __init__(self):
-        pass
+        self.exception_handlder = TwitterExceptionHandler()
 
     def decode_tweet(self, content):
         try:
             info = [json.loads(content)]
+            if self.exception_handlder.is_tweet_exception(info):
+                raise tweepy.TweepError(content)
+
+            logger.info("json decoded successfully: "+str(info))
         except ValueError as err:
             logger.error(err.message)
             logger.error(content)
@@ -23,6 +29,7 @@ class TweetJSONDecoder:
         return info
 
     def decode_multiple_json(self, json_data):
+        logger.info("Starting decoding multiple json")
         final_tweet_data = []
         json_tweet = json_data.split('\n')
         logger.info(json_tweet)

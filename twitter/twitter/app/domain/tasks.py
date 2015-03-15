@@ -45,8 +45,8 @@ def start_digger(dominio, topic):
     return digger
 
 
-@celery_app.task(bind=True, default_retry_delay=10)
-def start_streaming(self, digger, topic):
+@celery_app.task(bind=True)
+def start_streaming(self, digger, topic, **kwargs):
     logging.info("Streaming is going to start for topic " + topic)
     try:
         digger.start_streaming(topic)
@@ -55,16 +55,21 @@ def start_streaming(self, digger, topic):
         if exception_handlder.is_message_limit_exception(e.message) or exception_handlder.is_message_limit_exception(
                 e.message):
             logger.info("Waiting to try again")
-            raise self.retry(exc=e, countdown=10)
+            # raise self.retry(exc=e, countdown=10)
+            self.retry(args=[digger, topic], exc=e, countdown=10, kwargs=kwargs)
         if exception_handlder.page_does_not_exist(e.message):
             logger.info("Information not found ")
-            raise self.retry(exc=e, countdown=10)
+            # raise self.retry(exc=e, countdown=10)
+            self.retry(args=[digger, topic], exc=e, countdown=10, kwargs=kwargs)
         if exception_handlder.is_range_limit_outh_exception(e.message):
             logger.error("Error limit 414 from twitter has been stoped the streaming, waiting for permission ")
-            raise self.retry(exc=e, countdown=10)
+            # raise self.retry(exc=e, countdown=10)
+            self.retry(args=[digger, topic], exc=e, countdown=10, kwargs=kwargs)
         if exception_handlder.is_range_limit_exception(e.message):
             logger.error("Error limit 420 from twitter has been stoped the streaming, waiting for restart limit ")
+            self.retry(args=[digger, topic], exc=e, countdown=10, kwargs=kwargs)
 
         logger.info("Si llego hasta aca es porque no agarro por ningun error anterior")
+        self.retry(args=[digger, topic], exc=e, countdown=10, kwargs=kwargs)
     digger.reset()
     start_streaming(digger, topic)

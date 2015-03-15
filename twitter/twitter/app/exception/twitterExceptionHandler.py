@@ -25,25 +25,23 @@ class TwitterExceptionHandler:
 
     @staticmethod
     def is_range_limit_outh_exception(expression):
-        message = expression[0].encode('unicode_escape')
-        return message == "Twitter error response: status code = 414"
+        return expression == "Twitter error response: status code = 414"
 
     @staticmethod
     def is_range_limit_exception(expression):
-        message = expression[0].encode('unicode_escape')
-        return message == "420"
+        return expression == "420"
 
     def is_limit_exception(self, expression):
-        return self.is_exception_of(expression[0], 'limit')
+        return self.is_exception_of(expression, 'limit')
 
     def is_message_limit_exception(self, expression):
-        if self.is_exception_of(expression[0], 'message'):
+        if self.is_exception_of(expression, 'message'):
             message = expression[0]['message']
             message = message.encode('unicode_escape')
             return message == ' Over capacity' or message=='Rate limit exceeded'
 
     def page_does_not_exist(self, expression):
-        if self.is_exception_of(expression[0], 'message'):
+        if self.is_exception_of(expression, 'message'):
             message = expression[0]['message']
             message = message.encode('unicode_escape')
             return message == 'Sorry, that page does not exist.'
@@ -51,13 +49,21 @@ class TwitterExceptionHandler:
     def is_exception_of(self, expression, exception_key):
         logger.error(expression)
         logger.error(exception_key)
-        if self.is_tweet_exception(expression):
-            keys = expression.keys()
+        if type(expression) == type(list()):
+            value = expression[0]
+
+        if self.is_tweet_exception_type(value):
+            keys = value.keys()
+            logger.info("Keys: "+str(keys))
             for key in keys:
                 key_d = key.encode('unicode_escape')
+                logger.info("key id: "+str(key_d))
                 return key_d in [exception_key]
         return False
 
     @staticmethod
-    def is_tweet_exception(expression):
+    def is_tweet_exception_type(expression):
         return type(expression) == type(dict())
+
+    def is_tweet_exception(self, value):
+        return self.is_limit_exception(value) or self.is_message_limit_exception(value)
