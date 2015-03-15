@@ -69,6 +69,7 @@ class Stream(tweepy.StreamListener):
 
     def on_error(self, status):
         logger.error("Error status is %s " % status)
+        raise tweepy.TweepError(status)
 
     def reset_count(self):
         self.count = 0

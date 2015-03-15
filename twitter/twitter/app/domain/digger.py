@@ -30,6 +30,7 @@ class Digger:
             logger.error(inst)
             logger.info("Finish Digger from key: %s" % key)
             stream.disconnect()
+            raise inst
 
     def reset(self):
         self.digger.reset_count()

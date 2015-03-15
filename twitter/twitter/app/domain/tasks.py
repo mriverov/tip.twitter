@@ -45,31 +45,26 @@ def start_digger(dominio, topic):
     return digger
 
 
-@celery_app.task(bind=True)
+@celery_app.task(bind=True, default_retry_delay=10)
 def start_streaming(self, digger, topic):
     logging.info("Streaming is going to start for topic " + topic)
     try:
         digger.start_streaming(topic)
-    except tweepy.TweepError as e:
-        if exception_handlder.is_over_capacity_exception(tweepy.TweepError):
-            logger.error(tweepy.TweepError)
+    except Exception as e:
+        logger.error(e.message)
+        if exception_handlder.is_message_limit_exception(e.message) or exception_handlder.is_message_limit_exception(
+                e.message):
             logger.info("Waiting to try again")
-            raise self.retry(exc=e, countdown=60 * 16)
-        if exception_handlder.is_information_not_found(tweepy.TweepError):
-            logger.error(tweepy.TweepError)
+            raise self.retry(exc=e, countdown=10)
+        if exception_handlder.page_does_not_exist(e.message):
             logger.info("Information not found ")
-            raise self.retry(exc=e, countdown=1)
-        exception_handlder.is_general_tweet_limit_exception(tweepy.TweepError)
-    except Exception as inst:
-        if exception_handlder.is_range_limit_outh_exception(inst.message):
-            logger.error(inst)
+            raise self.retry(exc=e, countdown=10)
+        if exception_handlder.is_range_limit_outh_exception(e.message):
             logger.error("Error limit 414 from twitter has been stoped the streaming, waiting for permission ")
-            raise self.retry(exc=inst, countdown=60 * 16)
-        if exception_handlder.is_range_limit_exception(inst.message):
-            logger.error(inst)
+            raise self.retry(exc=e, countdown=10)
+        if exception_handlder.is_range_limit_exception(e.message):
             logger.error("Error limit 420 from twitter has been stoped the streaming, waiting for restart limit ")
+
         logger.info("Si llego hasta aca es porque no agarro por ningun error anterior")
-        logger.error(inst.message)
-    # Comente esto para probar si es lo que esta generando el maximum recursion depth exceeded.
     digger.reset()
     start_streaming(digger, topic)

@@ -40,6 +40,8 @@ INSTALLED_APPS = (
 )
 
 CELERY_IMPORTS = "app.domain.tasks"
+CELERY_ENABLE_UTC = False
+CELERY_TIMEZONE = 'Argentina/Buenos Aires'
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
