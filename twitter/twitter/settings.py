@@ -39,7 +39,11 @@ INSTALLED_APPS = (
     'app'
 )
 
-CELERY_IMPORTS = "app.domain.tasks"
+CELERY_IMPORTS = (
+    "app.domain.tasks",
+    "app.domain.task_followers"
+)
+
 CELERY_ENABLE_UTC = False
 CELERY_TIMEZONE = 'Argentina/Buenos Aires'
 

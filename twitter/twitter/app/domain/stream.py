@@ -7,7 +7,7 @@ from app.models import Topic
 from app.domain.userPersistor import UserPersistor
 # from app.domain import tasks
 
-# from twitter.app.domain.tasks import processFollowers
+from app.domain.task_followers import process_followers
 from app.utils.tweetJSONDecoder import TweetJSONDecoder
 
 logger = logging.getLogger(__name__)
@@ -45,7 +45,7 @@ class Stream(tweepy.StreamListener):
                 logger.info("Start saving User")
                 user = user_persistor.save_user(user_content)
                 logger.info("User has been save successfully")
-                # tasks.process_followers.delay(user=user, cursor=self.cursor)
+                process_followers.delay(user=user, cursor=self.cursor)
                 # ######### Tweet ##############
                 tweet_persistor = TweetPersistor()
                 logger.info("Start saving Tweet")
