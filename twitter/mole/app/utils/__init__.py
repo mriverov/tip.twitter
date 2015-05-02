@@ -4,7 +4,7 @@ import coloredlogs
 import logging
 import traceback
 
-from requests.packages.urllib3 import  disable_warnings
+#from requests.packages.urllib3 import  disable_warnings
 
 from pymongo import MongoClient
 
@@ -21,7 +21,7 @@ class ErrorHandler:
     
     def __init__(self):
         
-        disable_warnings()
+        #disable_warnings()
 
         lf = LoggerFactory()
         self.logger = lf.create_logger()
@@ -38,7 +38,7 @@ class LoggerFactory:
     def create_logger(cls, name='mole'):
         
         if not LoggerFactory.default_logger:
-            disable_warnings()
+# 	           disable_warnings()
             coloredlogs.install()
             FORMAT = '%(asctime)-15s-8s %(message)s'
             logging.basicConfig(fomat=FORMAT)
