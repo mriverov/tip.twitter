@@ -1,7 +1,7 @@
 import requests
 import logging
-from app.models import User
-from app.domain.userEntityPersistor import UserEntityPersistor
+from mole.app.models import User
+from mole.app.domain.userEntityPersistor import UserEntityPersistor
 
 logger = logging.getLogger(__name__)
 

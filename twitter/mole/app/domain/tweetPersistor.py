@@ -1,5 +1,6 @@
 import logging
-from app.models import Tweet
+
+from mole.app.models import Tweet
 
 logger = logging.getLogger(__name__)
 

@@ -3,8 +3,8 @@ import logging
 import tweepy
 
 from celery import Celery
-from app.domain.followerPersistor import FollowerPersistor
-from app.exception.twitterExceptionHandler import TwitterExceptionHandler
+from mole.app.domain.followerPersistor import FollowerPersistor
+from mole.app.exception.twitterExceptionHandler import TwitterExceptionHandler
 
 celery_app = Celery('tasks', broker='amqp://guest@localhost//')
 

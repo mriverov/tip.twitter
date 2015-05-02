@@ -1,6 +1,6 @@
 import tweepy
 import logging
-from app.domain.userEntityPersistor import UserEntityPersistor
+from mole.app.domain.userEntityPersistor import UserEntityPersistor
 
 logger = logging.getLogger(__name__)
 
