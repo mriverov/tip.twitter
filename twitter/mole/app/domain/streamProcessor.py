@@ -15,49 +15,47 @@ from mole.app.domain.userPersistor import UserPersistor
 from mole.app.domain.task_followers import process_followers
 from mole.app.utils import LoggerFactory
 
-logger = LoggerFactory.create_logger()
+from mole.app.utils import StreamDAO
 
+logger = LoggerFactory.create_logger()
 
 class StreamProcessor():
 
+    def __init__(self,async=False):
+        
+        self.dao = StreamDAO()
+        
+    def start(self):
+        
+        records = self.dao.find_to_process()
+        for r in records:
+            logger.info("About to process %s " % r['text'])
+            self.process(r)
 
-    def on_data2(self, data):
-        logger.info("New data arrived. Count is %d" % self.count)
+    def process(self, content):
+        logger.info("Processing new record. Count is %d" % self.count)
         self.count += 1
-        print "-------------------"
-        logger.info("Count is %d" % self.count)
-        self.buffer = ""
-        self.buffer += data
-        if data.endswith("\r\n") and self.buffer.strip():
-            tweet_data = self.load_from_buffer
-            for content in tweet_data:
-                logger.info("Start saving information")
-                logger.info(content)
-                user_content = content['user']
-                # ########## User ##############
-                user_persistor = UserPersistor()
-                logger.info("Start saving User")
-                user = user_persistor.save_user(user_content)
-                logger.info("User has been save successfully")
-                
-                process_followers.delay(user=user, cursor=self.cursor)
-                # ######### Tweet ##############
-                tweet_persistor = TweetPersistor()
-                logger.info("Start saving Tweet")
-                tweet = tweet_persistor.save_tweet(content, self.get_topic(), user, user_persistor)
-                logger.info("Tweet has been save successfully")
-                # ######## Hashtag #############
-                hashtag_info = content['entities']['hashtags']
-                hashtag = HashtagPersistor()
-                logger.info("Start saving Hashtag")
-                hashtag.save_hashtag(hashtag_info, self.get_topic(), tweet)
-                logger.info("Hashtag has been save successfully")
-            logger.info("--------------")
-            logger.info("Count is %d" % self.count)
-            if self.count >= self.max_data:
-                logger.info("Count: " + str(self.count) + "> max_data: " + str(self.max_data))
-                return False
-        return True
+        logger.info(content)
+        user_content = content['user']
+        # ########## User ##############
+        user_persistor = UserPersistor()
+        logger.info("Start saving User")
+        user = user_persistor.save_user(user_content)
+        logger.info("User has been save successfully")
+        
+        process_followers.delay(user=user, cursor=self.cursor)
+        # ######### Tweet ##############
+        tweet_persistor = TweetPersistor()
+        logger.info("Start saving Tweet")
+        tweet = tweet_persistor.save_tweet(content, self.get_topic(), user, user_persistor)
+        logger.info("Tweet has been save successfully")
+        # ######## Hashtag #############
+        hashtag_info = content['entities']['hashtags']
+        hashtag = HashtagPersistor()
+        logger.info("Start saving Hashtag")
+        hashtag.save_hashtag(hashtag_info, self.get_topic(), tweet)
+        logger.info("Hashtag has been save successfully")
+        logger.info("--------------")
 
     def set_topic(self, _topic):
         self.topic = _topic
@@ -74,4 +72,6 @@ class StreamProcessor():
 
 
 if __name__ == '__main__':
-    pass
+    
+    sp = StreamProcessor()
+    sp.start()

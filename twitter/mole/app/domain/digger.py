@@ -7,7 +7,6 @@ from mole.app.domain.authenticator import Authenticator
 from mole.app.domain.stream import Stream
 
 from mole.app.utils import LoggerFactory, ErrorHandler
-from pygments.lexers._postgres_builtins import KEYWORDS
 
 logger = LoggerFactory.create_logger()
 
@@ -22,7 +21,7 @@ class Digger:
 
     def start_streaming(self, keywords):
         self.digger.set_topic(keywords)
-        stream = tweepy.streaming.Stream(self.auth, self.digger)
+        stream = tweepy.streaming.Stream(self.auth, self.digger,gzip=True)
         logger.info("Start streaming from key: %s" % keywords)
         try:
             #stream.filter(track=keywords,locations=[-73.533,-58.583,-53.367,-21.783 ])
