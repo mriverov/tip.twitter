@@ -16,6 +16,10 @@ class StreamDAO:
     def save(self, data):
         
         self.mongo.mole.stream.insert_one(data)
+        
+    def find_to_process(self):
+        records = self.mongo.mole.stream.find().limit(100)
+        return records
 
 class ErrorHandler:
     

@@ -1,6 +1,7 @@
 import tweepy
 import logging
 
+
 from mole.app.exception.twitterExceptionHandler import TwitterExceptionHandler
 from mole.app.domain.authenticator import Authenticator
 from mole.app.domain.stream import Stream
@@ -18,12 +19,13 @@ class Digger:
         self.digger = stream
         self.exception_handlder = TwitterExceptionHandler()
 
-    def start_streaming(self, key):
-        self.digger.set_topic(key)
-        stream = tweepy.streaming.Stream(self.auth, self.digger)
-        logger.info("Start streaming from key: %s" % key)
+    def start_streaming(self, keywords):
+        self.digger.set_topic(keywords)
+        stream = tweepy.streaming.Stream(self.auth, self.digger,gzip=True)
+        logger.info("Start streaming from key: %s" % keywords)
         try:
-            stream.filter(track=key,locations=[-73.533,-58.583,-53.367,-21.783 ])
+            #stream.filter(track=keywords,locations=[-73.533,-58.583,-53.367,-21.783 ])
+            stream.filter(track=keywords)
         except tweepy.TweepError as e:
             handler.handle_error(e)
             raise e
