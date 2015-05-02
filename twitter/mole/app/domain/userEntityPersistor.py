@@ -3,8 +3,8 @@ import logging
 from datetime import datetime
 from django.utils import timezone
 
-from app.models import User
-from app.domain.authenticator import Authenticator
+from mole.app.models import User
+from mole.app.domain.authenticator import Authenticator
 
 logger = logging.getLogger()
 

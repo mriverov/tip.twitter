@@ -1,33 +1,61 @@
 import tweepy
 import logging
 import json
-from app.domain.tweetPersistor import TweetPersistor
-from app.domain.hashtagPersistor import HashtagPersistor
-from app.models import Topic
-from app.domain.userPersistor import UserPersistor
+from mole.app.domain.tweetPersistor import TweetPersistor
+from mole.app.domain.hashtagPersistor import HashtagPersistor
+from mole.app.models import Topic
+from mole.app.domain.userPersistor import UserPersistor
 # from app.domain import tasks
 
-from app.domain.task_followers import process_followers
-from app.utils.tweetJSONDecoder import TweetJSONDecoder
+from mole.app.domain.task_followers import process_followers
+from mole.app.utils.tweetJSONDecoder import TweetJSONDecoder
+from mole.app.utils import StreamDAO, LoggerFactory
 
-logger = logging.getLogger(__name__)
+logger = LoggerFactory.create_logger()
 
 
 class Stream(tweepy.StreamListener):
 
-    def __init__(self, max_data=30):
+    def __init__(self, max_data=30000):
         self.buffer = ""
         self.max_data = max_data
         self.count = 0
         self.cursor = -1
         self.topic = None
         self.multiple_decoder = TweetJSONDecoder()
+        
+        self.dao = StreamDAO()
 
     @property
     def load_from_buffer(self):
         return self.multiple_decoder.decode_tweet(self.buffer)
-
+    
     def on_data(self, data):
+        #logger.info("New data arrived. Count is %d" % self.count)
+        self.count += 1
+        print "-------------------"
+        #logger.info("Count is %d" % self.count)
+        self.buffer = ""
+        self.buffer += data
+        try:
+            if data.endswith("\r\n") and self.buffer.strip():
+                tweet_data = self.load_from_buffer
+                for content in tweet_data:
+                    logger.info("Start saving information")
+                    for keyword in self.topic:
+                        if ( keyword in content['text'] ):
+                            self.dao.save(content)
+                        else:
+                            logger.info(content['text'])
+                logger.info("Count is %d" % self.count)
+                if self.count >= self.max_data:
+                    logger.info("Count: " + str(self.count) + "> max_data: " + str(self.max_data))
+                    return False
+        except Exception as e:
+            logger.error(e)
+        return True
+
+    def on_data2(self, data):
         logger.info("New data arrived. Count is %d" % self.count)
         self.count += 1
         print "-------------------"
@@ -45,6 +73,7 @@ class Stream(tweepy.StreamListener):
                 logger.info("Start saving User")
                 user = user_persistor.save_user(user_content)
                 logger.info("User has been save successfully")
+                
                 process_followers.delay(user=user, cursor=self.cursor)
                 # ######### Tweet ##############
                 tweet_persistor = TweetPersistor()

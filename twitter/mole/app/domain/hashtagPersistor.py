@@ -1,5 +1,5 @@
 import logging
-from app.models import Hashtag
+from mole.app.models import Hashtag
 
 logger = logging.getLogger(__name__)
 

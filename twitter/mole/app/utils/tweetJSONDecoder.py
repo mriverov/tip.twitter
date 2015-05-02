@@ -1,7 +1,7 @@
 import logging
 import json
 import tweepy
-from app.exception.twitterExceptionHandler import TwitterExceptionHandler
+from mole.app.exception.twitterExceptionHandler import TwitterExceptionHandler
 
 
 __author__ = 'Marina'
@@ -18,14 +18,15 @@ class TweetJSONDecoder:
         try:
             info = [json.loads(content)]
             if self.exception_handlder.is_tweet_exception(info):
+                logger.error(info)
                 raise tweepy.TweepError(content)
 
-            logger.info("json decoded successfully: "+str(info))
+            #logger.info("json decoded successfully: "+str(info))
         except ValueError as err:
             logger.error(err.message)
-            logger.error(content)
+            #logger.error(content)
             info = self.decode_multiple_json(content)
-            logger.error(str(info))
+            #logger.error(str(info))
         return info
 
     def decode_multiple_json(self, json_data):
