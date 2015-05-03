@@ -8,18 +8,38 @@ import traceback
 
 from pymongo import MongoClient
 
-class StreamDAO:
+class MongoDAO():
     
     def __init__(self):
         self.mongo = MongoClient()
-    
+
     def save(self, data):
+        self.col.insert_one(data)
+
+    def delete(self,data):
+        self.col.remove(data['_id'])
         
-        self.mongo.mole.stream.insert_one(data)
+class StreamDAO(MongoDAO):
+    
+    def __init__(self):
+        MongoDAO.__init__(self)
+        self.col = self.mongo.mole.stream
         
     def find_to_process(self):
-        records = self.mongo.mole.stream.find().limit(100)
+        records = self.mongo.mole.stream.find().limit(1000)
         return records
+    
+class UserDAO(MongoDAO):
+    
+    def __init__(self):
+        MongoDAO.__init__(self)
+        self.col = self.mongo.mole.user 
+
+class TweetDAO(MongoDAO):
+    
+    def __init__(self):
+        MongoDAO.__init__(self)
+        self.col = self.mongo.mole.tweet 
 
 class ErrorHandler:
     
