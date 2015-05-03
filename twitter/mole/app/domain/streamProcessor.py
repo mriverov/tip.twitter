@@ -70,9 +70,12 @@ class StreamProcessor():
         logger.info(content)
         if 'user' in content:
             user_content = content['user']
-            followers = self.get_followers(user_content['id'])
-            user_content['followers'] = followers
-            self.user_dao.save(user_content)
+            user_id = user_content['id']
+            user = self.user_dao.get(user_id)
+            if not user:
+                followers = self.get_followers(user_id)
+                user_content['followers'] = followers
+                self.user_dao.save(user_content)
             self.stream_dao.delete(content)
             self.tweet_dao.save(content)
             return True

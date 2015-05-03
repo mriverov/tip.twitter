@@ -33,7 +33,11 @@ class UserDAO(MongoDAO):
     
     def __init__(self):
         MongoDAO.__init__(self)
-        self.col = self.mongo.mole.user 
+        self.col = self.mongo.mole.user
+    
+    def get(self,id):
+        user = self.col.find_one({'id':id})
+        return user 
 
 class TweetDAO(MongoDAO):
     
