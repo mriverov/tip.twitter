@@ -64,7 +64,6 @@ class StreamProcessor():
 
     def process(self, content):
         self.count += 1
-        #self.count += 1
         logger.info("Processing new record. Count is %d" % self.count)
         
         logger.info(content)
@@ -73,8 +72,9 @@ class StreamProcessor():
             user_id = user_content['id']
             user = self.user_dao.get(user_id)
             if not user:
-                followers = self.get_followers(user_id)
-                user_content['followers'] = followers
+                if 'followers' not in user_content:
+                    followers = self.get_followers(user_id)
+                    user_content['followers'] = followers
                 self.user_dao.save(user_content)
             self.stream_dao.delete(content)
             self.tweet_dao.save(content)
