@@ -72,7 +72,7 @@ class StreamProcessor():
             user_id = user_content['id']
             user = self.user_dao.get(user_id)
             if not user:
-                if 'followers' not in user_content:
+                if not user_content['followers']:
                     followers = self.get_followers(user_id)
                     user_content['followers'] = followers
                 self.user_dao.save(user_content)
