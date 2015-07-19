@@ -21,7 +21,8 @@ for record in tweet:
 
 users_filter = db.user.find({"id": {"$in": users_topico}})
 
-adj_list=[]
+# armo el "adjencency list" como string
+adj_list = []
 
 for user in users_filter:
     followers = ""
@@ -29,38 +30,15 @@ for user in users_filter:
         followers = " " + " ".join(str(x) for x in user['followers'])
     adj_list.append(str(user['id']) + followers)
 
+# armo el grafo a partir del string
 g = nx.parse_adjlist(adj_list, nodetype = int)
 
+# calculo centralidad de grado
 degree_centrality = nx.degree_centrality(g)
 # closeness_centrality = nx.closeness_centrality(g)
 # betweenness_centrality = nx.betweenness_centrality(g)
 # eigenvector_centrality = nx.eigenvector_centrality(g)
 
-
-
-
-
-
-
-
-
-
-
-
-#g = nx.read_adjlist("C:\Users\Marina\Desktop\TIP\To_test\miniSedEdgeList.csv", delimiter=", ", create_using=nx.Graph(), encoding = 'utf-8')
-
-
-
-
-
-
-
-# to get more that one element
-# e= max(eigenvector_centrality.values())
-# keys = [x for x,y in eigenvector_centrality.items() if y ==e]
-
-max = max(degree_centrality.iterkeys(), key=lambda k: degree_centrality[k])
+# obtengo el usuario con mayor centralidad
+max = max(degree_centrality.iterkeys(), key = lambda k: degree_centrality[k])
 user = db.user.find_one({u'id': max})
-
-print user
-# print keys
