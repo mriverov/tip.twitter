@@ -10,7 +10,7 @@ from mole.app.utils import LoggerFactory, ErrorHandler
 
 logger = LoggerFactory.create_logger()
 
-handler =ErrorHandler()
+handler = ErrorHandler()
 
 class Digger:
 
@@ -31,7 +31,7 @@ class Digger:
             raise e
         except Exception as inst:
             handler.handle_error(inst)
-            logger.info("Finish Digger from key: %s" % key)
+            logger.info("Finish Digger from key: %s" % keywords)
             stream.disconnect()
             raise inst
 

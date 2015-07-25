@@ -1,15 +1,11 @@
 import requests
 import logging
 from mole.app.models import User
-from mole.app.domain.userEntityPersistor import UserEntityPersistor
 
 logger = logging.getLogger(__name__)
 
 
-class FollowerPersistor(UserEntityPersistor):
-    
-    def __init__(self):
-        UserEntityPersistor.__init__(self)
+class FollowerPersistor():
 
     def process_followers_from(self, user, cursor):
         next_cursor = None

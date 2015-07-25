@@ -3,7 +3,7 @@ from django.contrib import admin
 # Register your models here.
 
 
-from app.models import Domain, Topic, User, Tweet, Hashtag
+from mole.app.models import Domain, Topic, Hashtag
 
 class DomainAdmin(admin.ModelAdmin):
     pass
