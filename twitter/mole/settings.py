@@ -39,14 +39,6 @@ INSTALLED_APPS = (
     'mole.app'
 )
 
-CELERY_IMPORTS = (
-    "app.domain.tasks",
-    "app.domain.task_followers"
-)
-
-CELERY_ENABLE_UTC = False
-CELERY_TIMEZONE = 'Argentina/Buenos Aires'
-
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -56,9 +48,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware'
 )
 
-ROOT_URLCONF = 'urls'
+ROOT_URLCONF = 'mole.urls'
 
-WSGI_APPLICATION = 'wsgi.application'
+WSGI_APPLICATION = 'mole.wsgi.application'
 
 
 # Database
@@ -74,13 +66,13 @@ DATABASES = {
     }
 }
 
-TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), '../twitter/app/frontend/'),)
+TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), '../mole/app/frontend/'),)
 
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    os.path.join(os.path.dirname(__file__), '../twitter/static'),
+    os.path.join(os.path.dirname(__file__), '../mole/static'),
 )
 
 
