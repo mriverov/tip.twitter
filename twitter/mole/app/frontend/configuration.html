@@ -49,7 +49,7 @@
         	<div class="col-xs-12 col-sm-9" >
         	    <div class="pull-bottom">
         			<h1> <strong> Configurate your Digger </strong> </h1>
-        			<h4 class="text-info" >Project name: {{domain}}</h4>
+        			<h4 class="text-info" >Project name: {{project}}</h4>
         		</div>
         	</div>
         </div>
@@ -62,21 +62,13 @@
     <div class="container">
     	<div class="row">
     		<div class="col-xs-6 col-sm-3">
+
 			     <form role="form" action="/start_digger/" method="post" > {% csrf_token %}
 			        <div class="form-group">
-			          <label for="keyword">Keyword</label>
-			          <input type="text" class="form-control" id="keyword" name="keyword" placeholder="Keyword">
+			          <label for="keywords">Keyword</label>
+			          <input type="text" class="form-control" id="keywords" name="keywords" placeholder="Keyword">
 			        </div>
-			        
-			        <div class="form-group">
-			          <label for="mention">Mention</label>
-			          <input type="text" class="form-control" id="mention" name="mention" placeholder="@mention">
-			        </div>
-			        
-			        <div class="form-group">
-			          <label for="hashtag">Hashtag</label>
-			          <input type="text" class="form-control" id="hashtag" name="hashtag" placeholder="#hashtag">
-			        </div>
+
 			        
 			
 				    <div class="form-group">

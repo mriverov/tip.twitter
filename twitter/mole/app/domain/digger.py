@@ -12,6 +12,7 @@ logger = LoggerFactory.create_logger()
 
 handler = ErrorHandler()
 
+
 class Digger:
 
     def __init__(self, auth, stream):
@@ -19,12 +20,13 @@ class Digger:
         self.digger = stream
         self.exception_handlder = TwitterExceptionHandler()
 
-    def start_streaming(self, keywords):
+    def start_streaming(self, keywords, project):
         self.digger.set_topic(keywords)
-        stream = tweepy.streaming.Stream(self.auth, self.digger,gzip=True)
+        self.digger.set_project(project)
+        stream = tweepy.streaming.Stream(self.auth, self.digger, gzip=True)
         logger.info("Start streaming from key: %s" % keywords)
         try:
-            #stream.filter(track=keywords,locations=[-73.533,-58.583,-53.367,-21.783 ])
+            # stream.filter(track=keywords,locations=[-73.533,-58.583,-53.367,-21.783 ])
             stream.filter(track=keywords)
         except tweepy.TweepError as e:
             handler.handle_error(e)
@@ -38,13 +40,10 @@ class Digger:
     def reset(self):
         self.digger.reset_count()
 
-if __name__ == '__main__':
-    
-    logging.basicConfig()
-    
-    a = Authenticator()
-    
-    stream = Stream()
-
-    digger = Digger(a.authenticate(), stream)
-    digger.start_streaming(['scioli','massa','carrio','cfk'])
+    @staticmethod
+    def start_digger(keywords, project):
+        logging.basicConfig()
+        a = Authenticator()
+        stream = Stream()
+        digger = Digger(a.authenticate(), stream)
+        digger.start_streaming(keywords, project)
