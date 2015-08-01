@@ -73,8 +73,6 @@ class StreamProcessor():
         return True
 
 if __name__ == '__main__':
-    
-    
     api = API(Authenticator().authenticate())
     sp = StreamProcessor(api)
     sp.start()

@@ -3,22 +3,21 @@ from django.db import models
 # Create your models here.
 
 
-class Domain(models.Model):
+class UserApp(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
+    email = models.CharField(max_length=100, null=True, blank=True)
+    password = models.CharField(max_length=100, null=True, blank=True)
 
 
-class Topic(models.Model):
+class Project(models.Model):
+    name = models.CharField(max_length=100, null=True, blank=True)
+    # user = models.ForeignKey('UserApp')
+
+
+class KeyWord(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
     count = models.IntegerField(null=True, blank=True, default=0)
 
-    domain = models.ForeignKey('Domain')
-
-
-class Hashtag(models.Model):
-    name = models.CharField(max_length=100, null=True, blank=True)
-    count = models.IntegerField(null=True, blank=True, default=0)
-
-    topic = models.ForeignKey('Topic')
-
+    project = models.ForeignKey('Project')
 
 
