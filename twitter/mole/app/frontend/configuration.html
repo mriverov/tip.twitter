@@ -11,6 +11,7 @@
 	<link rel="shortcut icon" href="{% static 'bootstrap-3.2.0-dist/image/digger.ico' %}" />
     <title>Mole</title>
     <link href="{% static 'bootstrap-3.2.0-dist/css/bootstrap.css' %}" rel="stylesheet">
+    <script src="{% static 'bootstrap-3.2.0-dist/js/keywords.js' %}"></script>
 	    
   </head>
 
@@ -61,19 +62,38 @@
     <div class="span8">
     <div class="container">
     	<div class="row">
-    		<div class="col-xs-6 col-sm-3">
+    		<div>
 
 			     <form role="form" action="/start_digger/" method="post" > {% csrf_token %}
-			        <div class="form-group">
-			          <label for="keywords">Keyword</label>
-			          <input type="text" class="form-control" id="keywords" name="keywords" placeholder="Keyword">
-			        </div>
+                     <!--<input type="hidden" class="form-control" id="keywords" name="keywords">-->
 
-			        
-			
-				    <div class="form-group">
-				      <input type="submit" class="btn btn-info" value="Save" />
-				    </div>
+			         <!------ KEYWORDS ------>
+
+                     <div class="form-group">
+                        <label class="control-label">Keywords:</label>
+                        <div>
+                            <section class="panel panel-primary">
+                                <div class="panel-body clone_div" id="clone_div" index="0">
+                                    <div>
+                                        <div class="col-md-10">
+                                            <input id="keywords[0]" name="keywords[0]" type="text" class="form-control"
+                                                   data-parsley-required="true" data-parsley-trigger="change"
+                                                   placeholder="keyword">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <a class="btn btn-default" onclick="javascript:removeButton($(this))">Remove</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                            <a id="addKeywordButton" href="#" class="btn btn-default" onclick="javascript:cloneDiv()">Add Keyword</a>
+                        </div>
+                     </div>
+
+                     <!------ /KEYWORDS ------>
+				     <div class="form-group">
+				        <input type="submit" class="btn btn-info" value="Save" />
+				     </div>
 				</form>
 			</div>
 		</div>
