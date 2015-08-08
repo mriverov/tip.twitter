@@ -62,7 +62,7 @@ DATABASES = {
         'NAME': 'tip_twitter',
         'USER': 'tip_twitter',
         'PASSWORD': 'tip_twitter',
-        'HOST': 'localhost'
+        'HOST': '192.168.1.149'
     }
 }
 

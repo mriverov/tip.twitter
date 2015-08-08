@@ -1,44 +1,62 @@
 import networkx as nx
 import pymongo as p
 
-# import matplotlib.pyplot as plt
+import sys
 
-client = p.MongoClient()
-db = client['mole']
+class CentralityProcessor:
 
-#ids usuarios
-users_topico = []
+    def process(self. topic=None):
+        # import matplotlib.pyplot as plt
 
-# defino topico
-topico = ["messi"]
+        client = p.MongoClient()
+        db = client['mole']
 
-# me quedo con los tweets del topico
-tweet = db.tweet.find({'text': {'$regex': topico[0]}})
+        #ids usuarios
+        users_topico = []
 
-# me quedo con lo usuarios de esos tweets
-for record in tweet:
-    users_topico.append(record['user']['id'])
+        # defino topico
+        topico = ["messi"]
 
-users_filter = db.user.find({"id": {"$in": users_topico}})
+        # me quedo con los tweets del topico
+        tweet = db.tweet.find({'text': {'$regex': topico[0]}})
 
-# armo el "adjencency list" como string
-adj_list = []
+        # me quedo con lo usuarios de esos tweets
+        for record in tweet:
+            users_topico.append(record['user']['id'])
 
-for user in users_filter:
-    followers = ""
-    if user['followers']:
-        followers = " " + " ".join(str(x) for x in user['followers'])
-    adj_list.append(str(user['id']) + followers)
+        users_filter = db.user.find({"id": {"$in": users_topico}})
 
-# armo el grafo a partir del string
-g = nx.parse_adjlist(adj_list, nodetype = int)
+        # armo el "adjencency list" como string
+        adj_list = []
 
-# calculo centralidad de grado
-degree_centrality = nx.degree_centrality(g)
-# closeness_centrality = nx.closeness_centrality(g)
-# betweenness_centrality = nx.betweenness_centrality(g)
-# eigenvector_centrality = nx.eigenvector_centrality(g)
+        for user in users_filter:
+            followers = ""
+            if user['followers']:
+                followers = " " + " ".join(str(x) for x in user['followers'])
+            adj_list.append(str(user['id']) + followers)
 
-# obtengo el usuario con mayor centralidad
-max = max(degree_centrality.iterkeys(), key = lambda k: degree_centrality[k])
-user = db.user.find_one({u'id': max})
+        # armo el grafo a partir del string
+        g = nx.parse_adjlist(adj_list, nodetype = int)
+
+        # calculo centralidad de grado
+        degree_centrality = nx.degree_centrality(g)
+        # closeness_centrality = nx.closeness_centrality(g)
+        # betweenness_centrality = nx.betweenness_centrality(g)
+        # eigenvector_centrality = nx.eigenvector_centrality(g)
+
+        # obtengo el usuario con mayor centralidad
+        max = max(degree_centrality.iterkeys(), key = lambda k: degree_centrality[k])
+        user = db.user.find_one({u'id': max})
+
+if __name__ == '__main__':
+
+    if len(sys.argv) != 2:
+        print "Missing topic"
+        exit(2)
+
+    topic_name = sys.argv[1]
+
+    # esto hay que sacarlo del django model.
+    topic = Topic.get_by_name(topic_name)
+    processor = CentralityProcessor()
+    processor.process(topic)

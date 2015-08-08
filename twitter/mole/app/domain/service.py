@@ -13,13 +13,7 @@ class DiggerService:
 
 class ProjectService:
 
-    def __init__(self):
-        pass
 
-    def save_project(self, project_name):
-        project = Project()
-        project.name = project_name
-        project.save()
 
 
     def get_project(self, _name):
