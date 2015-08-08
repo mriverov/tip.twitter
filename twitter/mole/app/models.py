@@ -2,11 +2,13 @@ from django.db import models
 
 # Create your models here.
 
+import os
+os.environ['DJANGO_SETTINGS_MODULE'] = 'mole.settings'
 
-class UserApp(models.Model):
-    name = models.CharField(max_length=100, null=True, blank=True)
-    email = models.CharField(max_length=100, null=True, blank=True)
-    password = models.CharField(max_length=100, null=True, blank=True)
+# class UserApp(models.Model):
+#     name = models.CharField(max_length=100, null=True, blank=True)
+#     email = models.CharField(max_length=100, null=True, blank=True)
+#     password = models.CharField(max_length=100, null=True, blank=True)
 
 
 class Project(models.Model):
@@ -34,6 +36,7 @@ class Tweet(models.Model):
     tweet_id = models.BigIntegerField(null=True, blank=True)
     text = models.CharField(max_length=5000, null=True, blank=True)
     retweet_count = models.IntegerField(null=True, blank=True)
+    created_at = models.DateTimeField(null=True, blank=True)
     retweet_id = models.BigIntegerField(null=True, blank=True)
     author = models.ForeignKey('User')
     project = models.ForeignKey('Project')

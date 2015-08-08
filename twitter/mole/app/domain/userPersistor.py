@@ -26,9 +26,12 @@ class UserPersistor:
         return user
 
     def save_user_with_followers(self, user_content, followers):
-        user = self.save_user(user_content)
-        user.followers = followers
-        user.save()
+        user = self.save_user(user_content['id'], user_content)
+        if followers:
+            user.followers = followers
+            user.save()
+
+        return user
 
     def validate_and_save(self, _id, _screen_name, _followers_count,_location ):
         screen_name = None
