@@ -39,7 +39,6 @@ class Stream(tweepy.StreamListener):
                     match = False
                     for keyword in self.topic:
                         if keyword in content['text'].lower() and (content['lang'] == 'es'):
-                            content['project_id'] = self.project
                             self.dao.save(content)
                             match = True
                             break

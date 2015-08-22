@@ -6,6 +6,7 @@ Created on 2/5/2015
 
 import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'mole.settings'
+from datetime import datetime
 import tweepy
 
 from mole.app.utils import LoggerFactory
@@ -57,7 +58,7 @@ class StreamProcessor():
         self.count += 1
         logger.info("Processing new record. Count is %d" % self.count)
         
-        logger.info(content)
+        # logger.info(content)
         if 'user' in content:
             user_content = content['user']
             user_id = user_content['id']

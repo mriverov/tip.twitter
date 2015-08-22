@@ -1,9 +1,11 @@
+import django
+import os
 from django.db import models
 
 # Create your models here.
 
-import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'mole.settings'
+django.setup()
 
 # class UserApp(models.Model):
 #     name = models.CharField(max_length=100, null=True, blank=True)
@@ -25,11 +27,26 @@ class KeyWord(models.Model):
 
 class User(models.Model):
     user_id = models.BigIntegerField(null=True, blank=True)
-    screen_name = models.CharField(max_length=500, null=True, blank=True)
-    followers_count = models.IntegerField(null=True, blank=True)
-    location = models.CharField(max_length=500, null=True, blank=True)
-    followers = models.ManyToManyField('self', related_name='followers', blank=True, null=True)
+    screen_name = models.CharField(max_length=500, null=True, blank=True, default="")
+    followers_count = models.IntegerField(null=True, blank=True, default=0)
+    location = models.CharField(max_length=500, null=True, blank=True, default="")
     centrality = models.FloatField(null=True, blank=True, default=0.0)
+
+    # followers = models.ManyToManyField('self', related_name='followers', blank=True, null=True)
+    followers = models.ManyToManyField('self',
+                                       through='Relationship',
+                                       symmetrical=False,
+                                       related_name='user_followers')
+
+    def add_relationship(self, other_user):
+        relationship, created = Relationship.objects.get_or_create(user=self, follower=other_user)
+        relationship.save()
+        return relationship
+
+
+class Relationship(models.Model):
+    user = models.ForeignKey('User', related_name='user')
+    follower = models.ForeignKey('User', related_name='follower')
 
 
 class Tweet(models.Model):

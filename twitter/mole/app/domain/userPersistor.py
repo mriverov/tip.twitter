@@ -11,29 +11,35 @@ class UserPersistor:
     def __init__(self):
         pass
 
-    def save_user(self, user_id, user_content):
-        _id = user_id
+    def save_follower(self, user, follower_id, follower_content):
+        if follower_content is None:
+            follower = User(user_id=follower_id)
+            follower.save()
+        else:
+            follower = self.save_user(follower_content)
 
-        if user_content is None:
-            user = User(user_id=_id)
-            return user.save()
+        # user.followers.add(follower)
+        user.save()
+        user.add_relationship(follower)
+        return user
 
+    def save_user(self, user_content):
+        _user_id = user_content['id']
         _screen_name = user_content['screen_name']
         _location = user_content['location']
         _followers_count = user_content['followers_count']
 
-        user = self.validate_and_save(_id, _screen_name, _followers_count, _location)
+        user = self.validate_and_save(_user_id, _screen_name, _followers_count, _location)
         return user
 
-    def save_user_with_followers(self, user_content, followers):
-        user = self.save_user(user_content['id'], user_content)
-        if followers:
-            user.followers = followers
+    def load_followers(self, user, followers):
+        for follower in followers:
+            user.followers.add(follower)
             user.save()
 
         return user
 
-    def validate_and_save(self, _id, _screen_name, _followers_count,_location ):
+    def validate_and_save(self, _id, _screen_name, _followers_count, _location):
         screen_name = None
         location = None
 
