@@ -1,4 +1,5 @@
-from mole.app.analyzer.CentralityAnalizer import CentralityAnalyzer
+from mole.app.analyzer.centralityAnalizer import CentralityAnalyzer
+from mole.app.analyzer.trendAnalyzer import TrendAnalyzer
 from mole.app.utils import LoggerFactory
 
 from mole.app.models import Project
@@ -16,18 +17,20 @@ db = client['mole']
 
 logger = LoggerFactory.create_logger()
 
+
 class ProjectFactory:
-    '''
-    Esta clase tiene como objectivo crear un projecto a partir de una configuracion dada
-    Entre los parametros estan:
-        - from / to : fechas desde y hasta para filtrar los tweets.
-        - keywords : palabras clave que identifican un topico o tematica
-    '''
+    """
+        Esta clase tiene como objectivo crear un projecto a partir de una configuracion dada
+        Entre los parametros estan:
+            - from / to : fechas desde y hasta para filtrar los tweets.
+            - keywords : palabras clave que identifican un topico o tematica
+    """
 
     def __init__(self):
         self.tweet_persistor = TweetPersistor()
         self.user_persistor = UserPersistor()
         self.centrality_analyzer = CentralityAnalyzer()
+        self.trend_analyzer = TrendAnalyzer()
 
     def save_project(self, project_name, keywords):
         project = Project(name=project_name)
@@ -58,6 +61,7 @@ class ProjectFactory:
             users_saved.append(user)
             self.save_tweet_model(project, tweet, user)
 
+        self.update_tweet_trend(tweets, project)
         self.update_user_centrality(users_saved)
 
     def save_tweet_model(self, project, content_tweet, user):
@@ -83,6 +87,11 @@ class ProjectFactory:
     def update_user_centrality(self, users_saved):
         centrality_by_user = self.centrality_analyzer.get_centrality_by_user(users_saved)
         self.user_persistor.update_user_centrality(centrality_by_user)
+
+    def update_tweet_trend(self, tweets, project):
+        trend_by_tweet = self.trend_analyzer.save_trend(tweets, project)
+        for tweet_id, trend in trend_by_tweet.items():
+            self.tweet_persistor.update_trend(tweet_id, trend)
 
 if __name__ == '__main__':
     project_factory = ProjectFactory()

@@ -62,7 +62,6 @@ class UserPersistor:
             user.centrality = centrality
             user.save()
 
-
     @staticmethod
     def encode(word):
         return word.encode('unicode_escape')

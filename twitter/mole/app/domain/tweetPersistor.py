@@ -31,6 +31,12 @@ class TweetPersistor:
 
         tweet = Tweet(tweet_id=content['id'], text=text, retweet_count=content['retweet_count'], author=user,
                       project=project, retweet_id=retweet_id, created_at=created_at)
-        return tweet.save()
+        tweet.save()
+        return tweet
+
+    def update_trend(self, tweet_id, trend):
+        tweet = Tweet.object.get(tweet_id=tweet_id)
+        tweet.trend = trend
+        tweet.save()
 
 

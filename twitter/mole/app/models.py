@@ -21,7 +21,12 @@ class Project(models.Model):
 class KeyWord(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
     count = models.IntegerField(null=True, blank=True, default=0)
+    project = models.ForeignKey('Project')
 
+
+class Trend(models.Model):
+    date = models.DateTimeField(null=True, blank=True)
+    tweets_count = models.IntegerField(null=True, blank=True, default=0)
     project = models.ForeignKey('Project')
 
 
@@ -57,3 +62,4 @@ class Tweet(models.Model):
     retweet_id = models.BigIntegerField(null=True, blank=True)
     author = models.ForeignKey('User')
     project = models.ForeignKey('Project')
+    trend = models.ForeignKey('Trend')
