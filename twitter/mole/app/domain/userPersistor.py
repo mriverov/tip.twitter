@@ -56,6 +56,13 @@ class UserPersistor:
 
         return user
 
+    def update_user_centrality(self, centrality_dic):
+        for user_id, centrality in centrality_dic.iteritems():
+            user = User.objects.get(user_id=user_id)
+            user.centrality = centrality
+            user.save()
+
+
     @staticmethod
     def encode(word):
         return word.encode('unicode_escape')

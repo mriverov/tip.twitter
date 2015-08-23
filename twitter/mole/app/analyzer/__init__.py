@@ -1,3 +1,4 @@
+from mole.app.analyzer.CentralityAnalizer import CentralityAnalyzer
 from mole.app.utils import LoggerFactory
 
 from mole.app.models import Project
@@ -26,6 +27,7 @@ class ProjectFactory:
     def __init__(self):
         self.tweet_persistor = TweetPersistor()
         self.user_persistor = UserPersistor()
+        self.centrality_analyzer = CentralityAnalyzer()
 
     def save_project(self, project_name, keywords):
         project = Project(name=project_name)
@@ -44,13 +46,19 @@ class ProjectFactory:
         query_date_end = to_date + " 23:59:00 +0000 2015"
 
         tweets = db.tweet.find()
+
+        # hay que utilizar esta query que es la filtra por fecha y por keywords
         # tweets = db.tweet.find({ "created_at": {"$gte": query_date_start, "$lt": query_date_end},
         #                         'text': {'$regex': {"$in": keywords}}})
         project = self.save_project(project_name, keywords)
 
+        users_saved = []
         for tweet in tweets:
             user = self.save_user_model(tweet['user'])
+            users_saved.append(user)
             self.save_tweet_model(project, tweet, user)
+
+        self.update_user_centrality(users_saved)
 
     def save_tweet_model(self, project, content_tweet, user):
         self.tweet_persistor.save_tweet(content_tweet, project, user)
@@ -61,7 +69,6 @@ class ProjectFactory:
             followers = user_content['followers']
             if followers:
                 self.save_followers(user, followers)
-
         return user
 
     def save_followers(self, user, followers):
@@ -72,6 +79,10 @@ class ProjectFactory:
             else:
                 follower_content = follower.next()
             self.user_persistor.save_follower(user, follower_id, follower_content)
+
+    def update_user_centrality(self, users_saved):
+        centrality_by_user = self.centrality_analyzer.get_centrality_by_user(users_saved)
+        self.user_persistor.update_user_centrality(centrality_by_user)
 
 if __name__ == '__main__':
     project_factory = ProjectFactory()
