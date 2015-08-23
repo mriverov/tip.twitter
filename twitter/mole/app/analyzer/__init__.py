@@ -54,18 +54,16 @@ class ProjectFactory:
         # tweets = db.tweet.find({ "created_at": {"$gte": query_date_start, "$lt": query_date_end},
         #                         'text': {'$regex': {"$in": keywords}}})
         project = self.save_project(project_name, keywords)
-
+        trend_by_tweet = self.trend_analyzer.save_trend(tweets, project)
         users_saved = []
         for tweet in tweets:
             user = self.save_user_model(tweet['user'])
             users_saved.append(user)
-            self.save_tweet_model(project, tweet, user)
-
-        self.update_tweet_trend(tweets, project)
+            self.save_tweet_model(project, tweet, user, trend_by_tweet[tweet['id']])
         self.update_user_centrality(users_saved)
 
-    def save_tweet_model(self, project, content_tweet, user):
-        self.tweet_persistor.save_tweet(content_tweet, project, user)
+    def save_tweet_model(self, project, content_tweet, user, trend):
+        self.tweet_persistor.save_tweet(content_tweet, project, user, trend)
 
     def save_user_model(self, user_content):
         user = self.user_persistor.save_user(user_content)
@@ -87,11 +85,6 @@ class ProjectFactory:
     def update_user_centrality(self, users_saved):
         centrality_by_user = self.centrality_analyzer.get_centrality_by_user(users_saved)
         self.user_persistor.update_user_centrality(centrality_by_user)
-
-    def update_tweet_trend(self, tweets, project):
-        trend_by_tweet = self.trend_analyzer.save_trend(tweets, project)
-        for tweet_id, trend in trend_by_tweet.items():
-            self.tweet_persistor.update_trend(tweet_id, trend)
 
 if __name__ == '__main__':
     project_factory = ProjectFactory()

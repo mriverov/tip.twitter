@@ -13,7 +13,7 @@ class TweetPersistor:
     def __init__(self):
         pass
 
-    def save_tweet(self, content, project, user):
+    def save_tweet(self, content, project, user, trend):
         text = content['text']
         retweet_id = None
         if 'retweeted_status' in content and content['retweeted_status'] is not None:
@@ -30,13 +30,6 @@ class TweetPersistor:
             timezone.make_aware(created_at, timezone.get_current_timezone())
 
         tweet = Tweet(tweet_id=content['id'], text=text, retweet_count=content['retweet_count'], author=user,
-                      project=project, retweet_id=retweet_id, created_at=created_at)
+                      project=project, retweet_id=retweet_id, created_at=created_at, trend=trend)
         tweet.save()
         return tweet
-
-    def update_trend(self, tweet_id, trend):
-        tweet = Tweet.object.get(tweet_id=tweet_id)
-        tweet.trend = trend
-        tweet.save()
-
-
