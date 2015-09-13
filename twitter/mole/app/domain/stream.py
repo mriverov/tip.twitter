@@ -17,18 +17,18 @@ class Stream(tweepy.StreamListener):
         self.cursor = -1
         self.topic = None
         self.multiple_decoder = TweetJSONDecoder()
-        
         self.dao = StreamDAO()
+        self.project = None
 
     @property
     def load_from_buffer(self):
         return self.multiple_decoder.decode_tweet(self.buffer)
     
     def on_data(self, data):
-        #logger.info("New data arrived. Count is %d" % self.count)
+        # logger.info("New data arrived. Count is %d" % self.count)
         self.count += 1
         print "-------------------"
-        #logger.info("Count is %d" % self.count)
+        # logger.info("Count is %d" % self.count)
         self.buffer = ""
         self.buffer += data
         try:
@@ -38,12 +38,12 @@ class Stream(tweepy.StreamListener):
 
                     match = False
                     for keyword in self.topic:
-                        if ( keyword in content['text'].lower() and (content['lang'] == 'es' )):
+                        if keyword in content['text'].lower() and (content['lang'] == 'es'):
                             self.dao.save(content)
                             match = True
                             break
                     if match:
-                        self.saved+=1
+                        self.saved += 1
                         logger.info("Matched: %s " % content['text'])
                     else:
                         logger.info("Not Matched : %s " % content['text'])
@@ -58,6 +58,9 @@ class Stream(tweepy.StreamListener):
 
     def set_topic(self, _topic):
         self.topic = _topic
+
+    def set_project(self, project):
+        self.project = project
 
     def on_error(self, status):
         logger.error("Error status is %s " % status)

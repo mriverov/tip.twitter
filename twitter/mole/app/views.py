@@ -1,10 +1,13 @@
 import logging
 from django.shortcuts import render, render_to_response
 from django.views.decorators.csrf import csrf_exempt
-from app.domain.diggerService import DiggerService
+
+from mole.app.domain.service import DiggerService, ProjectService, KeyWordService
 
 logger = logging.getLogger(__name__)
 diggerService = DiggerService()
+project_service = ProjectService()
+key_word_service = KeyWordService()
 
 
 def get_home(request):
@@ -13,34 +16,27 @@ def get_home(request):
 
 @csrf_exempt
 def new_project(request):
-    domain = request.POST['project']
-    request.session['domain'] = domain
+    project = request.POST['project']
+    request.session['project'] = project
 
-    logger.info("Create project with name "+domain)
-    return render_to_response('configuration.html', {'domain': domain})
+    project_service.save_project(project)
+
+    logger.info("Create project with name " + project)
+    return render_to_response('configuration.html', {'project': project})
 
 
 @csrf_exempt
 def start_digger(request):
-    keyword = request.POST['keyword']
-    mention = request.POST['mention']
-    hashtag = request.POST['hashtag']
+    _keywords = request.POST['keywords']
+    keywords = _keywords.split(',')
 
-    domain = request.session.get('domain')
-    diggerService.start_digger_now(domain, keyword, mention, hashtag)
+    project_name = request.session.get('project')
+    project = project_service.get_project(project_name)
 
-    logger.info(" Configured project with domain "+domain + str(get_message(keyword, mention, hashtag)))
-    return render_to_response('streaming_started.html', {'keyword': keyword})
+    key_word_service.save_keywords(keywords, project)
+    diggerService.start_digger_now(keywords, project.id)
 
+    logger.info(" Configured project: " + project_name + " with keywords: " + str(keywords))
+    return render_to_response('streaming_started.html', {'keyword': keywords})
 
-def get_message(keyword, mention, hashtag):
-    message = ""
-    if keyword is not None:
-        message = message+" and keyword "+str(keyword)
-    if mention is not None:
-        message = message+" and for mention "+str(mention)
-    if hashtag is not None:
-        message = message+" and hashtag "+str(hashtag)
-
-    return message
 

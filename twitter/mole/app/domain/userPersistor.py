@@ -1,56 +1,67 @@
-import tweepy
 import logging
-from mole.app.domain.userEntityPersistor import UserEntityPersistor
-
-logger = logging.getLogger(__name__)
 
 
-class UserPersistor(UserEntityPersistor):
+from mole.app.models import User
+
+logger = logging.getLogger()
+
+
+class UserPersistor:
+
     def __init__(self):
-        UserEntityPersistor.__init__(self)
-        self.auth = self.authenticator.authenticate()
-        self.api = tweepy.API(self.auth)
+        pass
 
-    def get_user_from_api(self, _id):
-        # api = tweepy.API(self.auth)
-        """
+    def save_follower(self, user, follower_id, follower_content):
+        if follower_content is None:
+            follower = User(user_id=follower_id)
+            follower.save()
+        else:
+            follower = self.save_user(follower_content)
 
-        :param _id:
-        :return:
-        """
-        return self.api.get_user(_id)
-
-    def save_user_from_api(self, user):
-        """
-
-        :param user:
-        :return:
-        """
-        saved_user = self.validate_and_save(user.id, user.name, user.screen_name, user.description,
-                                            user.followers_count,
-                                            user.friends_count, user.statuses_count,
-                                            user.favourites_count,
-                                            user.location,
-                                            user.time_zone, user.created_at)
-        return saved_user
+        user.followers.add(follower)
+        user.save()
+        # user.add_relationship(follower)
+        return user
 
     def save_user(self, user_content):
-        user = self.save_user_without_followers(user_content)
-        # processFollowers.delay(user=user, cursor=-1)
-        # LO SACO DE ACA YA QUE NO ME GUSTA. SE ESTAN CRUZANDO TODAS LAS CAPAS
+        _user_id = user_content['id']
+        _screen_name = user_content['screen_name']
+        _location = user_content['location']
+        _followers_count = user_content['followers_count']
+
+        user = self.validate_and_save(_user_id, _screen_name, _followers_count, _location)
+        return user
+
+    def load_followers(self, user, followers):
+        for follower in followers:
+            user.followers.add(follower)
+            user.save()
 
         return user
 
-    def get_user_mention(self, user_content):
-        """
+    def validate_and_save(self, _id, _screen_name, _followers_count, _location):
+        screen_name = None
+        location = None
 
-        :param user_content:
-        :return:
-        """
-        user = None
-        if user_content:
-            id_info = user_content[0]
-            if id_info != [] and ('id' in id_info):
-                user = self.get_user_from_api(id_info['id'])
-                user = self.save_user_from_api(user)
+        if _screen_name is not None:
+            screen_name = self.encode(_screen_name)
+        if _location is not None:
+            location = self.encode(_location)
+
+        try:
+            user = User.objects.get(user_id=_id)
+        except User.DoesNotExist:
+            user = User(user_id=_id, screen_name=screen_name, followers_count=_followers_count, location=location)
+            user.save()
+
         return user
+
+    def update_user_centrality(self, centrality_dic):
+        for user_id, centrality in centrality_dic.iteritems():
+            user = User.objects.get(user_id=user_id)
+            user.centrality = centrality
+            user.save()
+
+    @staticmethod
+    def encode(word):
+        return word.encode('unicode_escape')

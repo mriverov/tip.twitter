@@ -1,51 +1,65 @@
+import django
+import os
 from django.db import models
 
 # Create your models here.
 
+os.environ['DJANGO_SETTINGS_MODULE'] = 'mole.settings'
+django.setup()
 
-class Domain(models.Model):
+# class UserApp(models.Model):
+#     name = models.CharField(max_length=100, null=True, blank=True)
+#     email = models.CharField(max_length=100, null=True, blank=True)
+#     password = models.CharField(max_length=100, null=True, blank=True)
+
+
+class Project(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
+    # user = models.ForeignKey('UserApp')
 
 
-class Topic(models.Model):
+class KeyWord(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
     count = models.IntegerField(null=True, blank=True, default=0)
+    project = models.ForeignKey('Project')
 
-    domain = models.ForeignKey('Domain')
+
+class Trend(models.Model):
+    date = models.CharField(max_length=500, null=True, blank=True)
+    tweets_count = models.IntegerField(null=True, blank=True, default=0)
+    project = models.ForeignKey('Project')
 
 
 class User(models.Model):
     user_id = models.BigIntegerField(null=True, blank=True)
-    name = models.CharField(max_length=500, null=True, blank=True)
-    screen_name = models.CharField(max_length=500, null=True, blank=True)
-    description = models.CharField(max_length=1000, null=True, blank=True)
-    followers_count = models.IntegerField(null=True, blank=True)
-    friends_count = models.IntegerField(null=True, blank=True)
-    statuses_count = models.IntegerField(null=True, blank=True)
-    favourites_count = models.IntegerField(null=True, blank=True)
-    location = models.CharField(max_length=500, null=True, blank=True)
-    time_zone = models.CharField(max_length=500, null=True, blank=True)
-    created_at = models.DateTimeField(null=True, blank=True)
+    screen_name = models.CharField(max_length=500, null=True, blank=True, default="")
+    followers_count = models.IntegerField(null=True, blank=True, default=0)
+    location = models.CharField(max_length=500, null=True, blank=True, default="")
+    centrality = models.FloatField(null=True, blank=True, default=0.0)
+
     followers = models.ManyToManyField('self', related_name='followers', blank=True, null=True)
+#     followers = models.ManyToManyField('self',
+#                                        through='Relationship',
+#                                        symmetrical=False,
+#                                        related_name='user_followers')
+#
+#     def add_relationship(self, other_user):
+#         relationship, created = Relationship.objects.get_or_create(user=self, follower=other_user)
+#         relationship.save()
+#         return relationship
+#
+#
+# class Relationship(models.Model):
+#     user = models.ForeignKey('User', related_name='user')
+#     follower = models.ForeignKey('User', related_name='follower')
 
 
 class Tweet(models.Model):
-    tweetid = models.BigIntegerField(null=True, blank=True)
+    tweet_id = models.BigIntegerField(null=True, blank=True)
     text = models.CharField(max_length=5000, null=True, blank=True)
-    favorite_count = models.IntegerField(null=True, blank=True)
     retweet_count = models.IntegerField(null=True, blank=True)
-    retweet = models.ForeignKey('self', blank=True, null=True)
+    created_at = models.DateTimeField(null=True, blank=True)
+    retweet_id = models.BigIntegerField(null=True, blank=True)
     author = models.ForeignKey('User')
-    topic = models.ForeignKey('Topic')
-    user_mentions = models.ManyToManyField(User, related_name='mentions', blank=True, null=True)
-
-
-class Hashtag(models.Model):
-    name = models.CharField(max_length=100, null=True, blank=True)
-    count = models.IntegerField(null=True, blank=True, default=0)
-
-    topic = models.ForeignKey('Topic')
-    tweets = models.ManyToManyField(Tweet, related_name='hashtags', blank=True, null=True)
-
-
-
+    project = models.ForeignKey('Project')
+    trend = models.ForeignKey('Trend')
