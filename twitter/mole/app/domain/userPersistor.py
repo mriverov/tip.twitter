@@ -18,9 +18,9 @@ class UserPersistor:
         else:
             follower = self.save_user(follower_content)
 
-        # user.followers.add(follower)
+        user.followers.add(follower)
         user.save()
-        user.add_relationship(follower)
+        # user.add_relationship(follower)
         return user
 
     def save_user(self, user_content):

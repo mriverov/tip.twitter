@@ -27,7 +27,7 @@ class KeyWord(models.Model):
 class Trend(models.Model):
     date = models.CharField(max_length=500, null=True, blank=True)
     tweets_count = models.IntegerField(null=True, blank=True, default=0)
-    # project = models.ForeignKey('Project')
+    project = models.ForeignKey('Project')
 
 
 class User(models.Model):
@@ -37,21 +37,21 @@ class User(models.Model):
     location = models.CharField(max_length=500, null=True, blank=True, default="")
     centrality = models.FloatField(null=True, blank=True, default=0.0)
 
-    # followers = models.ManyToManyField('self', related_name='followers', blank=True, null=True)
-    followers = models.ManyToManyField('self',
-                                       through='Relationship',
-                                       symmetrical=False,
-                                       related_name='user_followers')
-
-    def add_relationship(self, other_user):
-        relationship, created = Relationship.objects.get_or_create(user=self, follower=other_user)
-        relationship.save()
-        return relationship
-
-
-class Relationship(models.Model):
-    user = models.ForeignKey('User', related_name='user')
-    follower = models.ForeignKey('User', related_name='follower')
+    followers = models.ManyToManyField('self', related_name='followers', blank=True, null=True)
+#     followers = models.ManyToManyField('self',
+#                                        through='Relationship',
+#                                        symmetrical=False,
+#                                        related_name='user_followers')
+#
+#     def add_relationship(self, other_user):
+#         relationship, created = Relationship.objects.get_or_create(user=self, follower=other_user)
+#         relationship.save()
+#         return relationship
+#
+#
+# class Relationship(models.Model):
+#     user = models.ForeignKey('User', related_name='user')
+#     follower = models.ForeignKey('User', related_name='follower')
 
 
 class Tweet(models.Model):

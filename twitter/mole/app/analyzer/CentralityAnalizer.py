@@ -15,8 +15,9 @@ class CentralityAnalyzer:
 
         for user in users:
             followers = ""
+            user_followers = [follower.user_id for follower in user.followers.all()]
             if user.followers:
-                followers = " " + " ".join(str(x) for x in user.followers.all)
+                followers = " " + " ".join(str(x) for x in user_followers)
             adj_list.append(str(user.user_id) + followers)
 
         # armo el grafo a partir del string
