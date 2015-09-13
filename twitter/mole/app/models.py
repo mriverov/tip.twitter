@@ -25,9 +25,9 @@ class KeyWord(models.Model):
 
 
 class Trend(models.Model):
-    date = models.DateTimeField(null=True, blank=True)
+    date = models.CharField(max_length=500, null=True, blank=True)
     tweets_count = models.IntegerField(null=True, blank=True, default=0)
-    project = models.ForeignKey('Project')
+    # project = models.ForeignKey('Project')
 
 
 class User(models.Model):

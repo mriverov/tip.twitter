@@ -64,9 +64,9 @@ class TrendAnalyzer:
         # save Trend
         trend_by_tweet = {}
         for tweet_hour in tweet_group_by_hour:
-            trend = Trend(date=tweet_hour.tweet.created_at, tweets_count=len(tweet_hour), project=project)
+            trend = Trend(date=tweet_hour[0].tweet['created_at'], tweets_count=len(tweet_hour))
             trend.save()
             for tweet in tweet_hour:
-                trend_by_tweet[tweet.tweet_id] = trend
+                trend_by_tweet[tweet.tweet['id']] = trend
 
         return trend_by_tweet
