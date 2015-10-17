@@ -56,9 +56,12 @@ class StreamProcessor():
         except TweepError as e:
             if e.response.status_code == 429:
                 logger.info("Rate limit exceded! ")
+		rate_limits = self.api.rate_limit_status()
+		logger.info("Remaining quota is %d" % rate_limits['resources']['followers']['/followers/ids']['remaining'])
                 return False
-            else:
-                raise e
+            elif e.response.status_code == 401:
+		logger.warn("Status code %d. Maybe this user's account is private." % e.response.status_code)
+                return ['PRIVATE' ]
         logger.info("Next cursor is %d" % next_cursor)
         return followers
 
@@ -67,15 +70,20 @@ class StreamProcessor():
         #self.count += 1
         logger.info("Processing new record. Count is %d" % self.count)
         
-        logger.info(content)
+        logger.debug(content)
         if 'user' in content:
             user_content = content['user']
             user_id = user_content['id']
             user = self.user_dao.get(user_id)
-            if not user:
+            if not user or not user['followers']:
                 followers = self.get_followers(user_id)
+		logger.info("Followers is %s " % str(followers))
+		if followers == False:
+		    raise Exception("Can not continue until quota is restored")
                 user_content['followers'] = followers
+		logger.info("User %d has %d followers" % ( user_id, len(followers)))
                 self.user_dao.save(user_content)
+			   
             self.stream_dao.delete(content)
             self.tweet_dao.save(content)
             return True
@@ -106,7 +114,18 @@ class StreamProcessor():
 
 if __name__ == '__main__':
     
-    
-    api = API(Authenticator().authenticate())
-    sp = StreamProcessor(api)
-    sp.start()
+    retry_count = 0
+    max_retries = 20
+    while ( retry_count< max_retries):
+	    api = API(Authenticator().authenticate())
+	    remaining =  api.rate_limit_status()['resources']['followers']['/followers/ids']['remaining']
+	    if remaining == 0:
+		logger.warn("No limit")
+		retry_count+=1
+	    else: 
+		try:
+		    logger.info("Starting stream processor with %d remaining quota" % remaining)
+		    sp = StreamProcessor(api)
+		    sp.start()
+		except Exception as e:
+		    logger.error(e)
