@@ -76,16 +76,18 @@ class StreamProcessor():
             user_content = content['user']
             user_id = user_content['id']
             user = self.user_dao.get(user_id)
-            if not user or not user['followers']:
+            if not 'followers' in user or not user['followers']:
                 followers = self.get_followers(user_id)
+                if followers == False:
+                    raise Exception("Can not continue until quota is restored")
+                logger.info("Followers are %s " % str(followers))
+                user_content['followers'] = followers
+                if not user:
+                    self.user_dao.save(user_content)
+                else:
+                    self.user_dao.update(user['_id'], user_content)
 
-            logger.info("Followers are %s " % str(followers))
-            if followers == False:
-                raise Exception("Can not continue until quota is restored")
-
-            user_content['followers'] = followers
             logger.info("User %d has %d followers" % ( user_id, len(followers)))
-            self.user_dao.save(user_content)
             self.stream_dao.delete(content)
             self.tweet_dao.save(content)
             return True

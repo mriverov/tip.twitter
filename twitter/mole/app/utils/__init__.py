@@ -22,6 +22,9 @@ class MongoDAO():
     def delete(self,data):
         self.col.delete_one({'_id': data['_id'] })
         
+    def update(self,_id, content):
+        self.col.update_one({'_id':_id}, {'$set':content})
+        
 class StreamDAO(MongoDAO):
     
     def __init__(self):
