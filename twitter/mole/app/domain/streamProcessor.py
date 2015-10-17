@@ -85,9 +85,9 @@ class StreamProcessor():
                 if not user:
                     self.user_dao.save(user_content)
                 else:
-                    self.user_dao.update(user['_id'], user_content)
+                    self.user_dao.update(user_id, user_content)
 
-            logger.info("User %d has %d followers" % ( user_id, len(followers)))
+                logger.info("User %d has %d followers" % ( user_id, len(followers)))
             self.stream_dao.delete(content)
             self.tweet_dao.save(content)
             return True
