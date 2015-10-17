@@ -75,10 +75,11 @@ class LoggerFactory:
             logging.basicConfig(fomat=FORMAT)
             
             logger = logging.getLogger(name)
-            logger.setLevel(logging.DEBUG)
             logfile_name = "%s.txt" % datetime.datetime.now().isoformat("T")
             fh = FileHandler(logfile_name)
             logger.addHandler(fh)
+
+            logger.setLevel(logging.DEBUG)
 
             logger.info("Mole Logger initialized")
             

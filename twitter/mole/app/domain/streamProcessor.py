@@ -68,7 +68,7 @@ class StreamProcessor():
 
     def process(self, content):
         self.count += 1
-        #self.count += 1
+
         logger.info("Processing new record. Count is %d" % self.count)
         
         logger.debug(content)
@@ -78,19 +78,18 @@ class StreamProcessor():
             user = self.user_dao.get(user_id)
             if not user or not user['followers']:
                 followers = self.get_followers(user_id)
-		logger.info("Followers is %s " % str(followers))
-		if followers == False:
-		    raise Exception("Can not continue until quota is restored")
-                user_content['followers'] = followers
-		logger.info("User %d has %d followers" % ( user_id, len(followers)))
-                self.user_dao.save(user_content)
-			   
+
+            logger.info("Followers are %s " % str(followers))
+            if followers == False:
+                raise Exception("Can not continue until quota is restored")
+
+            user_content['followers'] = followers
+            logger.info("User %d has %d followers" % ( user_id, len(followers)))
+            self.user_dao.save(user_content)
             self.stream_dao.delete(content)
             self.tweet_dao.save(content)
             return True
         
-            
-            
         user_content = content['user']
         # ########## User ##############
         user_persistor = UserPersistor()
