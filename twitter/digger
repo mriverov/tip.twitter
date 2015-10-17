@@ -1,0 +1,15 @@
+#!/bin/bash
+export PYTHONPATH=/home/charly/tip.twitter/twitter
+export DJANGO_SETTINGS_MODULE=mole.settings
+cd /home/charly/tip.twitter/twitter
+
+# Check if gedit is running
+if pgrep -f digger.py >/dev/null 2>&1
+then
+    PID=`pgrep -f digger.py`
+    echo "Running. PID=$PID"
+    nohup python mole/app/domain/streamProcessor.py > /dev/null & 
+else
+    echo "Stopped. Re-running"
+    nohup python mole/app/domain/digger.py > digger.out & 
+fi
