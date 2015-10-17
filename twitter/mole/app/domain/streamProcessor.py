@@ -5,6 +5,7 @@ Created on 2/5/2015
 '''
 
 import os
+import traceback
 os.environ['DJANGO_SETTINGS_MODULE'] = 'mole.settings'
 import tweepy
 
@@ -19,7 +20,7 @@ from mole.app.utils import LoggerFactory
 
 from mole.app.utils import StreamDAO, UserDAO, TweetDAO
 
-from mole.app.domain.authenticator import Authenticator
+from mole.app.domain.authenticator import Authenticator, all_keys
 from tweepy.api import API
 from tweepy.error import TweepError
 
@@ -114,18 +115,20 @@ class StreamProcessor():
 
 if __name__ == '__main__':
     
-    retry_count = 0
-    max_retries = 20
-    while ( retry_count< max_retries):
-	    api = API(Authenticator().authenticate())
-	    remaining =  api.rate_limit_status()['resources']['followers']['/followers/ids']['remaining']
-	    if remaining == 0:
-		logger.warn("No limit")
-		retry_count+=1
-	    else: 
-		try:
-		    logger.info("Starting stream processor with %d remaining quota" % remaining)
-		    sp = StreamProcessor(api)
-		    sp.start()
-		except Exception as e:
-		    logger.error(e)
+    for key in all_keys:
+        auth = Authenticator(key).authenticate()
+        api = API(auth)
+        rate_limits = api.rate_limit_status()
+        remaining =  rate_limits['resources']['followers']['/followers/ids']['remaining']
+        if remaining == 0:
+            logger.warn("No limit")
+        else: 
+            try:
+                logger.info("Starting stream processor with %d remaining quota" % remaining)
+                sp = StreamProcessor(api)
+                sp.start()
+            except Exception as e:
+                logger.error(e)
+                logger.error(traceback.format_exc())
+                logger.error(e)
+                logger.error(e)

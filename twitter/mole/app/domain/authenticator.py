@@ -6,6 +6,9 @@ from requests_oauthlib import oauth1_auth
 from urlparse import parse_qs
 
 import random
+from mole.app.utils import LoggerFactory
+
+logger = LoggerFactory.create_logger()
 
 keys1 = ['N6iEgbDKY1Bnd5NgPOY0pXgsg','NuNdKNLQ6X5pmTytrM9lEEkv56l0FdW2U3KnS3IwUyBkj70ZPI','2246759519-IOy2xXOaH7Ruy8p8vsAPWeE1gNGWzuqJewMqXlL','Q5tQqAbTebFoSA7aOpVaDoVinm7g2iusHg1FUtQZnHvKQ' ]
 
@@ -25,17 +28,20 @@ keys7 = ['YNC95CiQKrEWeSxgJX3hqoWCJ','JyZyM4IWosoT5Gh2fBsc51fNGzjbL3niQKIsVc5vt8
 all_keys = [keys1,keys2,keys3,keys4,keys5,keys6,keys7]
 
 class Authenticator:
-    def __init__(self):
+    def __init__(self, keys=None):
         config = ConfigParser.ConfigParser()
         config.read(['keys.cfg'])
         # self.consumer_key = config.get('API keys', 'apiKey')
         # self.consumer_secret = config.get('API keys', 'apiSecret')
         # self.access_key = config.get('API keys', 'accessToken')
         # self.access_secret = config.get('API keys', 'accessTokenSecret')
-	
-	keys = random.choice(all_keys)
-	
-	self.consumer_key = keys[0]
+        
+        if not keys:
+            keys = random.choice(all_keys)
+        
+        logger.info("Authentication started with key %s " % keys[0])
+        
+        self.consumer_key = keys[0]
         self.consumer_secret = keys[1]
         self.access_key = keys[2]
         self.access_secret = keys[3]

@@ -1,3 +1,5 @@
+from logging import FileHandler
+import datetime
 __author__ = 'Marina'
 
 import coloredlogs
@@ -8,16 +10,17 @@ import traceback
 
 from pymongo import MongoClient
 
+HOST="bati"
 class MongoDAO():
     
     def __init__(self):
-        self.mongo = MongoClient()
+        self.mongo = MongoClient(host=HOST)
 
     def save(self, data):
         self.col.insert_one(data)
 
     def delete(self,data):
-        self.col.remove(data['_id'])
+        self.col.delete_one({'_id': data['_id'] })
         
 class StreamDAO(MongoDAO):
     
@@ -72,8 +75,11 @@ class LoggerFactory:
             logging.basicConfig(fomat=FORMAT)
             
             logger = logging.getLogger(name)
-            logger.setLevel(logging.INFO)
-            
+            logger.setLevel(logging.DEBUG)
+            logfile_name = "%s.txt" % datetime.datetime.now().isoformat("T")
+            fh = FileHandler(logfile_name)
+            logger.addHandler(fh)
+
             logger.info("Mole Logger initialized")
             
             LoggerFactory.default_logger = logger
