@@ -41,5 +41,4 @@ class TweetPersistor:
             tweet = Tweet.objects.get(tweet_id=tweet_id)
             tweet.trend = trend
             tweet.save()
-            logger.info("Trend updated!")
         logger.info("Trend completed!")
