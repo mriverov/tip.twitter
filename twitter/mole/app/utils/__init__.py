@@ -4,7 +4,7 @@ import coloredlogs
 import logging
 import traceback
 
-from requests.packages.urllib3 import  disable_warnings
+from requests.packages.urllib3 import disable_warnings
 
 from pymongo import MongoClient
 
@@ -16,7 +16,7 @@ class MongoDAO():
     def save(self, data):
         self.col.insert_one(data)
 
-    def delete(self,data):
+    def delete(self, data):
         self.col.remove(data['_id'])
         
 class StreamDAO(MongoDAO):

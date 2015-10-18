@@ -62,4 +62,4 @@ class Tweet(models.Model):
     retweet_id = models.BigIntegerField(null=True, blank=True)
     author = models.ForeignKey('User')
     project = models.ForeignKey('Project')
-    trend = models.ForeignKey('Trend')
+    trend = models.ForeignKey('Trend', null=True)

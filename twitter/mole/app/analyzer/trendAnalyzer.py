@@ -35,8 +35,8 @@ class TrendAnalyzer:
         tweets_by_time = []
         # crea objetos TweetByTime con la fecha mejor expresada
         for tweet in tweets:
-            created_at = datetime.strptime(tweet['created_at'], '%a %b %d %H:%M:%S +0000 %Y')
-            tweet_created_at = utc.localize(created_at)
+            # created_at = datetime.strptime(tweet['created_at'], '%a %b %d %H:%M:%S +0000 %Y')
+            tweet_created_at = utc.localize(tweet.created_at)
             tweet_by_time = TweetByTime(tweet_created_at.year, tweet_created_at.month,
                                         tweet_created_at.day, tweet_created_at.hour, tweet_created_at.minute, tweet)
             tweets_by_time.append(tweet_by_time)
@@ -64,9 +64,9 @@ class TrendAnalyzer:
         # save Trend
         trend_by_tweet = {}
         for tweet_hour in tweet_group_by_hour:
-            trend = Trend(date=tweet_hour[0].tweet['created_at'], tweets_count=len(tweet_hour), project=project)
+            trend = Trend(date=tweet_hour[0].tweet.created_at, tweets_count=len(tweet_hour), project=project)
             trend.save()
             for tweet in tweet_hour:
-                trend_by_tweet[tweet.tweet['id']] = trend
+                trend_by_tweet[tweet.tweet.tweet_id] = trend
 
         return trend_by_tweet

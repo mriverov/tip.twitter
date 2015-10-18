@@ -11,12 +11,11 @@ class UserPersistor:
     def __init__(self):
         pass
 
-    def save_follower(self, user, follower_id, follower_content):
-        if follower_content is None:
+    def save_follower(self, user_id, follower_id, follower):
+        user = User.objects.get(user_id=user_id)
+        if not follower:
             follower = User(user_id=follower_id)
             follower.save()
-        else:
-            follower = self.save_user(follower_content)
 
         user.followers.add(follower)
         user.save()
@@ -30,13 +29,6 @@ class UserPersistor:
         _followers_count = user_content['followers_count']
 
         user = self.validate_and_save(_user_id, _screen_name, _followers_count, _location)
-        return user
-
-    def load_followers(self, user, followers):
-        for follower in followers:
-            user.followers.add(follower)
-            user.save()
-
         return user
 
     def validate_and_save(self, _id, _screen_name, _followers_count, _location):
