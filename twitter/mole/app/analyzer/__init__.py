@@ -49,9 +49,9 @@ class ProjectFactory:
     '''
     def create_project(self, from_date, to_date, keywords, project_name):
         logger.info("Starting extracting corpus")
-        # tweets = db.tweet.find()
-        tweets = db.tweet.find({'text': {'$regex': {"$in": keywords}}}).limit(10000)
-        logger.info("Corpus completed! ")
+        tweets = db.tweet.find()
+        # tweets = db.tweet.find({'text': {'$regex': {"$in": keywords}}})
+        logger.info("Corpus completed! "+ str(tweets.count()))
         logger.info("Starting saving project")
         project = self.save_project(project_name, keywords)
 
@@ -59,7 +59,7 @@ class ProjectFactory:
         tweets = self.filter_search(from_date, to_date, tweets)
         logger.info("Filter completed!")
 
-        users_saved = []
+        users_saved = {}
         users_by_followers = {}
         tweets_saved = []
         logger.info("Starting saving tweet and user")
@@ -68,7 +68,7 @@ class ProjectFactory:
             if 'followers' in tweet['user']:
                 users_by_followers[user.user_id] = tweet['user']['followers']
             saved_tweet = self.save_tweet_model(project, tweet, user)
-            users_saved.append(user)
+            users_saved[user.user_id] = user
             tweets_saved.append(saved_tweet)
         logger.info("Users and Tweets completed!")
         logger.info("Starting saving followers")
@@ -122,18 +122,18 @@ class ProjectFactory:
             if followers:
                 logger.info("Starting search in filter "+str(len(followers)))
                 for follower_id in followers:
-                    follower = filter(lambda user: user.user_id == follower_id, users)
+                    follower = filter(lambda user: user.user_id == follower_id, users.values())
                     if not follower:
 
                         not_found.append(follower_id)
-                        self.user_persistor.save_follower(user_id, follower_id, None)
+                        self.user_persistor.save_follower(users[user_id], follower_id, None)
                     else:
                         # logger.info("Follower found "+str(follower_id))
+                        # tenemos que agregar el usuario que ya fue encontrado en la tabla de relacion con el usuario.
                         if follower_id not in found:
-                            self.user_persistor.save_follower(user_id, follower_id, follower[0])
+                            self.user_persistor.save_follower(users[user_id], follower_id, follower[0])
                             found.append(follower_id)
         logger.info("Total followers not found "+str(len(not_found)))
-
 
     def update_user_centrality(self, users_saved):
         centrality_by_user = self.centrality_analyzer.get_centrality_by_user(users_saved)

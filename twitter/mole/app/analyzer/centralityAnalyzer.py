@@ -13,7 +13,7 @@ class CentralityAnalyzer:
         # armo el "adjencency list" como string
         adj_list = []
 
-        for user in users:
+        for user in users.values:
             followers = ""
             user_followers = [follower.user_id for follower in user.followers.all()]
             if user.followers:
@@ -23,7 +23,7 @@ class CentralityAnalyzer:
         # armo el grafo a partir del string
         g = nx.parse_adjlist(adj_list, nodetype=int)
 
-        # calculo centralidad de grado
+        # calculo centralidad de grados
         degree_centrality = nx.degree_centrality(g)
         # closeness_centrality = nx.closeness_centrality(g)
         # betweenness_centrality = nx.betweenness_centrality(g)

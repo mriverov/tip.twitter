@@ -11,8 +11,7 @@ class UserPersistor:
     def __init__(self):
         pass
 
-    def save_follower(self, user_id, follower_id, follower):
-        user = User.objects.get(user_id=user_id)
+    def save_follower(self, user, follower_id, follower):
         if not follower:
             follower = User(user_id=follower_id)
             follower.save()
