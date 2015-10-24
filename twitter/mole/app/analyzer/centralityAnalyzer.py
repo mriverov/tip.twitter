@@ -13,7 +13,7 @@ class CentralityAnalyzer:
         # armo el "adjencency list" como string
         adj_list = []
 
-        for user in users.values:
+        for user in users:
             followers = ""
             user_followers = [follower.user_id for follower in user.followers.all()]
             if user.followers:
