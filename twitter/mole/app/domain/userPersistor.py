@@ -24,8 +24,11 @@ class UserPersistor:
         # user.add_relationship(follower)
         return user
         '''
-        follower = User(user_id=follower_id)
-        follower.save()
+        try:
+            follower = User.objects.get(user_id=follower_id)
+        except User.DoesNotExist:
+            follower = User(user_id=follower_id)
+            follower.save()
         return follower
 
 

@@ -135,4 +135,5 @@ if __name__ == '__main__':
     date_to = datetime.strptime('2015-09-15', '%Y-%m-%d')
 
     project_factory = ProjectFactory()
-    project_factory.create_project(date_from, date_to, ["macri", "massa", "scioli", "elecciones", "corrupcion", "inseguridad", "ganancias"], "politica")
+    project_factory.create_project(date_from, date_to, ["macri", "massa", "scioli", "elecciones", "corrupcion",
+                                                        "inseguridad", "ganancias"], "politica")
