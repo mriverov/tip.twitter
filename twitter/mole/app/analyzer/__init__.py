@@ -49,8 +49,8 @@ class ProjectFactory:
     '''
     def create_project(self, from_date, to_date, keywords, project_name):
         logger.info("Starting extracting corpus")
-        # tweets = db.tweet.find()
-        tweets = db.tweet.find({'text': {'$regex': {"$in": keywords}}}).limit(5000)
+        tweets = db.tweet.find()
+        #tweets = db.tweet.find({'text': {'$regex': {"$in": keywords}}}).limit(5000)
         logger.info("Corpus completed! ")
         logger.info("Starting saving project")
         project = self.save_project(project_name, keywords)
@@ -59,19 +59,19 @@ class ProjectFactory:
         tweets = self.filter_search(from_date, to_date, tweets)
         logger.info("Filter completed!")
 
-        users_saved = []
+        users_saved = {}
         tweets_saved = []
         logger.info("Starting saving tweet and user")
         for tweet in tweets:
             user = self.save_user_model(tweet['user'])
             if 'followers' in tweet['user']:
-                user = self.save_complete_followers(user, tweet['user']['followers'])
+                user = self.save_complete_followers(user, tweet['user']['followers'],users_saved)
             saved_tweet = self.save_tweet_model(project, tweet, user)
             tweets_saved.append(saved_tweet)
-            users_saved.append(user)
+            users_saved[user.user_id]=user
         logger.info("Users and Tweets completed!")
 
-        self.start_analyzer(users_saved, tweets_saved, project)
+        self.start_analyzer(users_saved.values(), tweets_saved, project)
 
     def filter_search(self, from_date, to_date, tweets):
         filtered_tweets = []
@@ -111,11 +111,17 @@ class ProjectFactory:
         user = self.user_persistor.save_user(user_content)
         return user
 
-    def save_complete_followers(self, user, follower_ids):
+    def save_complete_followers(self, user, follower_ids, users_saved):
+        followers = []
         if not follower_ids:
             return user
         for follower_id in follower_ids:
-            user = self.user_persistor.save_follower(user, follower_id)
+            follower = users_saved.get(follower_id, None)
+            if follower is None:
+                follower = self.user_persistor.save_follower(user, follower_id)
+            followers.append(follower)
+        user.followers.add(*followers)
+        user.save()
         logger.info("Finishing saving followers: " + str(len(follower_ids)))
         return user
 

@@ -12,6 +12,7 @@ class UserPersistor:
         pass
 
     def save_follower(self, user, follower_id):
+        '''
         try:
             follower = User.objects.get(user_id=follower_id)
         except User.DoesNotExist:
@@ -22,6 +23,11 @@ class UserPersistor:
         user.save()
         # user.add_relationship(follower)
         return user
+        '''
+        follower = User(user_id=follower_id)
+        follower.save()
+        return follower
+
 
     def save_user(self, user_content):
         _user_id = user_content['id']
@@ -51,9 +57,7 @@ class UserPersistor:
 
     def update_user_centrality(self, centrality_dic):
         for user_id, centrality in centrality_dic.iteritems():
-            user = User.objects.get(user_id=user_id)
-            user.centrality = centrality
-            user.save()
+            User.objects.filter(user_id=user_id).update(centrality=centrality)
 
     @staticmethod
     def encode(word):
