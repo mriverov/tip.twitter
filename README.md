@@ -1,9 +1,7 @@
 tip.twitter
 ===========
 
-TIP Análisis de Tweets
-
-Hay que buscar un nombre mejor! 
+TIP Análisis de redes sociales Twitter
 
 Documentacion:
 - Api twitter: https://github.com/tweepy/tweepy
