@@ -23,7 +23,7 @@ class CentralityAnalyzer:
         # armo el grafo a partir del string
         g = nx.parse_adjlist(adj_list, nodetype=int)
 
-        # calculo centralidad de grado
+        # calculo centralidad de grados
         degree_centrality = nx.degree_centrality(g)
         # closeness_centrality = nx.closeness_centrality(g)
         # betweenness_centrality = nx.betweenness_centrality(g)

@@ -11,17 +11,26 @@ class UserPersistor:
     def __init__(self):
         pass
 
-    def save_follower(self, user, follower_id, follower_content):
-        if follower_content is None:
+    def save_follower(self, user, follower_id):
+        '''
+        try:
+            follower = User.objects.get(user_id=follower_id)
+        except User.DoesNotExist:
             follower = User(user_id=follower_id)
             follower.save()
-        else:
-            follower = self.save_user(follower_content)
 
         user.followers.add(follower)
         user.save()
         # user.add_relationship(follower)
         return user
+        '''
+        try:
+            follower = User.objects.get(user_id=follower_id)
+        except User.DoesNotExist:
+            follower = User(user_id=follower_id)
+            follower.save()
+        return follower
+
 
     def save_user(self, user_content):
         _user_id = user_content['id']
@@ -30,13 +39,6 @@ class UserPersistor:
         _followers_count = user_content['followers_count']
 
         user = self.validate_and_save(_user_id, _screen_name, _followers_count, _location)
-        return user
-
-    def load_followers(self, user, followers):
-        for follower in followers:
-            user.followers.add(follower)
-            user.save()
-
         return user
 
     def validate_and_save(self, _id, _screen_name, _followers_count, _location):
@@ -58,9 +60,7 @@ class UserPersistor:
 
     def update_user_centrality(self, centrality_dic):
         for user_id, centrality in centrality_dic.iteritems():
-            user = User.objects.get(user_id=user_id)
-            user.centrality = centrality
-            user.save()
+            User.objects.filter(user_id=user_id).update(centrality=centrality)
 
     @staticmethod
     def encode(word):

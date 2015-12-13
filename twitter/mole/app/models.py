@@ -31,7 +31,7 @@ class Trend(models.Model):
 
 
 class User(models.Model):
-    user_id = models.BigIntegerField(null=True, blank=True)
+    user_id = models.BigIntegerField(db_index=True, null=True, blank=True)
     screen_name = models.CharField(max_length=500, null=True, blank=True, default="")
     followers_count = models.IntegerField(null=True, blank=True, default=0)
     location = models.CharField(max_length=500, null=True, blank=True, default="")
@@ -62,4 +62,4 @@ class Tweet(models.Model):
     retweet_id = models.BigIntegerField(null=True, blank=True)
     author = models.ForeignKey('User')
     project = models.ForeignKey('Project')
-    trend = models.ForeignKey('Trend')
+    trend = models.ForeignKey('Trend', null=True)
