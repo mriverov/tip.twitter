@@ -53,4 +53,4 @@ if __name__ == '__main__':
     a = Authenticator()
     stream = Stream()
     digger = Digger(a.authenticate(), stream)
-    digger.start_streaming(['scioli','massa','carrio','cfk'])
+    digger.start_streaming(['scioli','macri','cfk'])

@@ -30,7 +30,8 @@ class TweetPersistor:
             timezone.make_aware(created_at, timezone.get_current_timezone())
 
         tweet = Tweet(tweet_id=content['id'], text=text, retweet_count=content['retweet_count'], author=user,
-                      project=project, retweet_id=retweet_id, created_at=created_at)
+                      project=project, retweet_id=retweet_id, created_at=created_at,
+                      favorite_count=content['favorite_count'])
         tweet.save()
         return tweet
 
