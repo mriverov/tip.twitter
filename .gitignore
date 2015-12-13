@@ -3,3 +3,5 @@
 keys.cfg
 .idea/
 *.log
+
+twitter/mole/settings.py

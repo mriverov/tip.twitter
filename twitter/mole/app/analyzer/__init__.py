@@ -81,6 +81,7 @@ class ProjectFactory:
         for tweet in tweets:
             tweet_date = datetime.strptime(tweet['created_at'], '%a %b %d %H:%M:%S +0000 %Y')
             # tweet_created_at = utc.localize(tweet_date)
+            # logger.info(tweet_date)
             if to_date > tweet_date > from_date:
                 # for k in keywords:
                 # if k in tweet['text'].lower():
@@ -88,7 +89,7 @@ class ProjectFactory:
                 filtered_tweets.append(tweet)
                 #        break
             if not matched:
-                # logger.info("Not matched: "+tweet['text'])
+                #logger.info("Not matched: "+tweet['text'])
                 excluded_tweets += 1
             matched = False
         logger.info("Total matched: "+str(len(filtered_tweets)))
@@ -131,8 +132,8 @@ class ProjectFactory:
         self.user_persistor.update_user_centrality(centrality_by_user)
 
 if __name__ == '__main__':
-    date_from = datetime.strptime('2015-01-08', '%Y-%m-%d')
-    date_to = datetime.strptime('2015-09-15', '%Y-%m-%d')
+    date_from = datetime.strptime('2015-12-12', '%Y-%m-%d')
+    date_to = datetime.strptime('2015-12-14', '%Y-%m-%d')
 
     project_factory = ProjectFactory()
     project_factory.create_project(date_from, date_to, ["macri", "massa", "scioli", "elecciones", "corrupcion",
