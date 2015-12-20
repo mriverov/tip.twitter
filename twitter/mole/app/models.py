@@ -64,3 +64,12 @@ class Tweet(models.Model):
     author = models.ForeignKey('User')
     project = models.ForeignKey('Project')
     trend = models.ForeignKey('Trend', null=True)
+
+class Urls(models.Model):
+    user_id = models.BigIntegerField(null=True, blank=True)
+    url = models.CharField(max_length=5000, null=True, blank=True)
+
+class UrlsGraph(models.Model):
+    user_oid_i = models.BigIntegerField(null=True, blank=True)
+    user_oid_j = models.BigIntegerField(null=True, blank=True)
+    ratio = models.FloatField(null=True, blank=True, default=0.0)

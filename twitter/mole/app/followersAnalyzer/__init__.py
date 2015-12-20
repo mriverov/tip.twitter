@@ -1,6 +1,6 @@
 from re import match
-from mole.app.analyzer.centralityAnalyzer import CentralityAnalyzer
-from mole.app.analyzer.trendAnalyzer import TrendAnalyzer
+from mole.app.followersAnalyzer.centralityAnalyzer import CentralityAnalyzer
+from mole.app.followersAnalyzer.trendAnalyzer import TrendAnalyzer
 
 from mole.app.models import Project
 from mole.app.models import KeyWord
@@ -100,7 +100,7 @@ class ProjectFactory:
         logger.info("Starting centrality calculation")
         self.update_user_centrality(users)
         logger.info("Centrality completed!")
-        logger.info("Starting trend analyzer")
+        logger.info("Starting trend followersAnalyzer")
         trend_by_tweet = self.trend_analyzer.save_trend(tweets, project)
         self.tweet_persistor.update_trend(trend_by_tweet)
         logger.info("Trend completed!")
