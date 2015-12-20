@@ -16,7 +16,7 @@ db = client['mole']
 
 f1 = 80
 k1 = 8
-MIN_URLS_PER_USER = 0
+MIN_URLS_PER_USER = 8
 
 
 def import_urls():
@@ -67,5 +67,5 @@ def process_graph():
                     logger.info("%i processed" % cant_processed)
 
 if __name__ == '__main__':
-    #import_urls()
+    import_urls()
     process_graph()
