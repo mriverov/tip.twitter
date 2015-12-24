@@ -73,3 +73,9 @@ class UrlsGraph(models.Model):
     user_oid_i = models.BigIntegerField(null=True, blank=True)
     user_oid_j = models.BigIntegerField(null=True, blank=True)
     ratio = models.FloatField(null=True, blank=True, default=0.0)
+
+class CentralityUrl(models.Model):
+    user_id = models.BigIntegerField(null=True, blank=True)
+    centrality = models.FloatField(null=True, blank=True, default=0.0)
+
+

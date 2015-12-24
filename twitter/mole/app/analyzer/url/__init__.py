@@ -4,6 +4,7 @@ import pymongo as p
 from pytz import timezone
 from simhash import SimhashIndex, Simhash
 
+from mole.app.analyzer.url.centralityByUrl import Centrality
 from mole.app.models import Urls, UrlsGraph
 from mole.app.utils import LoggerFactory
 
@@ -69,6 +70,7 @@ def process_graph():
                 logger.info("%i processed" % cant_processed)
 
 if __name__ == '__main__':
+
     logger.info("Start tweet")
     tweets_urls = db.tweet.find({"entities.urls": {'$exists': True, '$not': {'$size': 0}}})
     import_urls(tweets_urls)
@@ -82,3 +84,8 @@ if __name__ == '__main__':
     logger.info("Start graph")
     process_graph()
     logger.info("Finish graph")
+
+    logger.info("Starting centrality")
+    centralityUrlCalculator = Centrality()
+    centralityUrlCalculator.calculate_cetrality_by_url()
+    logger.info("Finish centrality")
