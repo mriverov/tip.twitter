@@ -71,7 +71,6 @@ def process_graph():
                 logger.info("%i processed" % cant_processed)
 
 if __name__ == '__main__':
-    '''
     logger.info("Start tweet")
     tweets_urls = db.tweet.find({"entities.urls": {'$exists': True, '$not': {'$size': 0}}})
     import_urls(tweets_urls)
@@ -85,7 +84,7 @@ if __name__ == '__main__':
     logger.info("Start graph")
     process_graph()
     logger.info("Finish graph")
-    '''
+
     logger.info("Starting centrality")
     centralityUrlCalculator = Centrality()
     persistor = CentralityPersistor()
