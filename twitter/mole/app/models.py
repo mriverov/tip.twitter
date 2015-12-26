@@ -7,28 +7,18 @@ from django.db import models
 os.environ['DJANGO_SETTINGS_MODULE'] = 'mole.settings'
 django.setup()
 
-# class UserApp(models.Model):
-#     name = models.CharField(max_length=100, null=True, blank=True)
-#     email = models.CharField(max_length=100, null=True, blank=True)
-#     password = models.CharField(max_length=100, null=True, blank=True)
-
-
 class Project(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
-    # user = models.ForeignKey('UserApp')
-
 
 class KeyWord(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
     count = models.IntegerField(null=True, blank=True, default=0)
     project = models.ForeignKey('Project')
 
-
 class Trend(models.Model):
     date = models.CharField(max_length=500, null=True, blank=True)
     tweets_count = models.IntegerField(null=True, blank=True, default=0)
     project = models.ForeignKey('Project')
-
 
 class User(models.Model):
     user_id = models.BigIntegerField(db_index=True, null=True, blank=True)
@@ -36,23 +26,7 @@ class User(models.Model):
     followers_count = models.IntegerField(null=True, blank=True, default=0)
     location = models.CharField(max_length=500, null=True, blank=True, default="")
     centrality = models.FloatField(null=True, blank=True, default=0.0)
-
     followers = models.ManyToManyField('self', related_name='followers', blank=True, null=True)
-#     followers = models.ManyToManyField('self',
-#                                        through='Relationship',
-#                                        symmetrical=False,
-#                                        related_name='user_followers')
-#
-#     def add_relationship(self, other_user):
-#         relationship, created = Relationship.objects.get_or_create(user=self, follower=other_user)
-#         relationship.save()
-#         return relationship
-#
-#
-# class Relationship(models.Model):
-#     user = models.ForeignKey('User', related_name='user')
-#     follower = models.ForeignKey('User', related_name='follower')
-
 
 class Tweet(models.Model):
     tweet_id = models.BigIntegerField(null=True, blank=True)
@@ -75,6 +49,22 @@ class UrlsGraph(models.Model):
     ratio = models.FloatField(null=True, blank=True, default=0.0)
 
 class CentralityUrl(models.Model):
+    user_id = models.BigIntegerField(null=True, blank=True)
+    centrality = models.FloatField(null=True, blank=True, default=0.0)
+
+
+class Hashtag(models.Model):
+    user_id = models.BigIntegerField(null=True, blank=True)
+    hashtag = models.CharField(max_length=5000, null=True, blank=True)
+
+
+class HashtagGraph(models.Model):
+    user_oid_i = models.BigIntegerField(null=True, blank=True)
+    user_oid_j = models.BigIntegerField(null=True, blank=True)
+    ratio = models.FloatField(null=True, blank=True, default=0.0)
+
+
+class CentralityHashtag(models.Model):
     user_id = models.BigIntegerField(null=True, blank=True)
     centrality = models.FloatField(null=True, blank=True, default=0.0)
 

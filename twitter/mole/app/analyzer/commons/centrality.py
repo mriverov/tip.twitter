@@ -11,25 +11,22 @@ class Centrality:
     def __init__(self):
         pass
 
-    def calculate_cetrality_by_url(self):
+    def calculate_cetrality(self, data):
 
         logger.info("Starting calculating centrality")
         adj_list = []
 
-        for user in UrlsGraph.objects.all():
+        for user in data:
             adj_list.append(str(user.user_oid_i) + " " + str(user.user_oid_j))
 
         g = nx.parse_adjlist(adj_list, nodetype=int)
-
+        logger.info(str(len(adj_list)))
         # calculo centralidad de grados
         degree_centrality = nx.degree_centrality(g)
         logger.info("Finish calculating centrality")
 
-        logger.info("Starting saving centrality")
-        for user_id, centrality in degree_centrality.iteritems():
-            url_centrality = CentralityUrl(user_id=user_id, centrality=centrality)
-            url_centrality.save()
-        logger.info("Finish saving centrality")
+        return degree_centrality
+
 
 
 

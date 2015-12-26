@@ -1,7 +1,5 @@
-from re import match
-from mole.app.followersAnalyzer.centralityAnalyzer import CentralityAnalyzer
-from mole.app.followersAnalyzer.trendAnalyzer import TrendAnalyzer
-
+from mole.app.analyzer.followers.centralityAnalyzer import CentralityAnalyzer
+from mole.app.analyzer.followers.trendAnalyzer import TrendAnalyzer
 from mole.app.models import Project
 from mole.app.models import KeyWord
 from mole.app.domain.tweetPersistor import TweetPersistor
