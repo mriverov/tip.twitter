@@ -2,6 +2,7 @@ import logging
 
 
 from mole.app.models import User
+from mole.app.utils import UserDAO
 
 logger = logging.getLogger()
 
@@ -9,26 +10,19 @@ logger = logging.getLogger()
 class UserPersistor:
 
     def __init__(self):
-        pass
+        self.user_dao = UserDAO()
 
-    def save_follower(self, user, follower_id):
-        '''
-        try:
-            follower = User.objects.get(user_id=follower_id)
-        except User.DoesNotExist:
-            follower = User(user_id=follower_id)
-            follower.save()
-
-        user.followers.add(follower)
-        user.save()
-        # user.add_relationship(follower)
-        return user
-        '''
-        try:
-            follower = User.objects.get(user_id=follower_id)
-        except User.DoesNotExist:
-            follower = User(user_id=follower_id)
-            follower.save()
+    def save_follower(self, follower_id):
+        user = self.user_dao.get(follower_id);
+        if user is not None:
+            logger.info("Follower found in Mongo %s" % follower_id)
+            follower = self.save_user(user)
+        else:
+            try:
+                follower = User.objects.get(user_id=follower_id)
+            except User.DoesNotExist:
+                follower = User(user_id=follower_id)
+                follower.save()
         return follower
 
 

@@ -57,13 +57,14 @@ class ProjectFactory:
         tweets = self.filter_search(from_date, to_date, tweets)
         logger.info("Filter completed!")
 
+        # sacar esto a un archivo para mejorar performance
         users_saved = {}
         tweets_saved = []
         logger.info("Starting saving tweet and user")
         for tweet in tweets:
             user = self.save_user_model(tweet['user'])
             if 'followers' in tweet['user']:
-                user = self.save_complete_followers(user, tweet['user']['followers'],users_saved)
+                user = self.save_complete_followers(user, tweet['user']['followers'], users_saved)
             saved_tweet = self.save_tweet_model(project, tweet, user)
             tweets_saved.append(saved_tweet)
             users_saved[user.user_id]=user
@@ -117,7 +118,7 @@ class ProjectFactory:
         for follower_id in follower_ids:
             follower = users_saved.get(follower_id, None)
             if follower is None:
-                follower = self.user_persistor.save_follower(user, follower_id)
+                follower = self.user_persistor.save_follower(follower_id)
             followers.append(follower)
         user.followers.add(*followers)
         user.save()
