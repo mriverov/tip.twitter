@@ -47,14 +47,16 @@ class ProjectFactory:
     '''
     def create_project(self, from_date, to_date, keywords, project_name):
         logger.info("Starting extracting corpus")
-        tweets = db.tweet.find()
-        #tweets = db.tweet.find({'text': {'$regex': {"$in": keywords}}}).limit(5000)
+        # tweets = db.tweet.find()
+        tweets = db.tweet.find({"text": {"$in": ["Macri"]}})
+
+        # QUERY : db.tweet.find({"text": {$regex : "scioli \macri", $options: "i"}}, {"text": 1})
         logger.info("Corpus completed! ")
         logger.info("Starting saving project")
         project = self.save_project(project_name, keywords)
 
         logger.info("Starting filter")
-        tweets = self.filter_search(from_date, to_date, tweets)
+        # tweets = self.filter_search(from_date, to_date, tweets)
         logger.info("Filter completed!")
 
         # sacar esto a un archivo para mejorar performance
@@ -63,14 +65,14 @@ class ProjectFactory:
         logger.info("Starting saving tweet and user")
         for tweet in tweets:
             user = self.save_user_model(tweet['user'])
-            if 'followers' in tweet['user']:
-                user = self.save_complete_followers(user, tweet['user']['followers'], users_saved)
+            # if 'followers' in tweet['user']:
+            #     user = self.save_complete_followers(user, tweet['user']['followers'], users_saved)
             saved_tweet = self.save_tweet_model(project, tweet, user)
             tweets_saved.append(saved_tweet)
-            users_saved[user.user_id]=user
+            # users_saved[user.user_id]=user
         logger.info("Users and Tweets completed!")
 
-        self.start_analyzer(users_saved.values(), tweets_saved, project)
+        # self.start_analyzer(users_saved.values(), tweets_saved, project)
 
     def filter_search(self, from_date, to_date, tweets):
         filtered_tweets = []
@@ -135,5 +137,4 @@ if __name__ == '__main__':
     date_to = datetime.strptime('2015-12-14', '%Y-%m-%d')
 
     project_factory = ProjectFactory()
-    project_factory.create_project(date_from, date_to, ["macri", "massa", "scioli", "elecciones", "corrupcion",
-                                                        "inseguridad", "ganancias"], "politica")
+    project_factory.create_project(date_from, date_to, ["Macri"], "politica")
