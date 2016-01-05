@@ -48,15 +48,16 @@ class ProjectFactory:
     def create_project(self, from_date, to_date, keywords, project_name):
         logger.info("Starting extracting corpus")
         # tweets = db.tweet.find()
-        tweets = db.tweet.find({"text": {"$in": ["Macri"]}})
-
-        # QUERY : db.tweet.find({"text": {$regex : "scioli \macri", $options: "i"}}, {"text": 1})
+        regex = '|'.join(keywords)
+        tweets = db.tweet.find({"text": {"$regex": regex, "$options": "i"}})
+        logger.info("Query: " + regex)
         logger.info("Corpus completed! ")
+
         logger.info("Starting saving project")
         project = self.save_project(project_name, keywords)
 
         logger.info("Starting filter")
-        # tweets = self.filter_search(from_date, to_date, tweets)
+        tweets = self.filter_search(from_date, to_date, tweets)
         logger.info("Filter completed!")
 
         # sacar esto a un archivo para mejorar performance
@@ -133,8 +134,9 @@ class ProjectFactory:
         self.user_persistor.update_user_centrality(centrality_by_user)
 
 if __name__ == '__main__':
-    date_from = datetime.strptime('2015-12-12', '%Y-%m-%d')
-    date_to = datetime.strptime('2015-12-14', '%Y-%m-%d')
+    date_from = datetime.strptime('2015-09-13', '%Y-%m-%d')
+    date_to = datetime.strptime('2015-09-14', '%Y-%m-%d')
 
     project_factory = ProjectFactory()
-    project_factory.create_project(date_from, date_to, ["Macri"], "politica")
+    project_factory.create_project(date_from, date_to, ["macri", "massa", "scioli", "elecciones", "corrupcion",
+                                                        "inseguridad", "ganancias"], "politica")

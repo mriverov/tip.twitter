@@ -5,7 +5,7 @@ from django.db import models
 # Create your models here.
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'mole.settings'
-django.setup()
+# django.setup()
 
 class Project(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
@@ -21,7 +21,7 @@ class Trend(models.Model):
     project = models.ForeignKey('Project')
 
 class User(models.Model):
-    user_id = models.BigIntegerField(db_index=True, null=True, blank=True)
+    user_id = models.BigIntegerField(null=True, blank=True)
     screen_name = models.CharField(max_length=500, null=True, blank=True, default="")
     followers_count = models.IntegerField(null=True, blank=True, default=0)
     location = models.CharField(max_length=500, null=True, blank=True, default="")
