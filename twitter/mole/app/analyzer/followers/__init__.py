@@ -19,7 +19,7 @@ utc = timezone('UTC')
 client = p.MongoClient()
 db = client['mole']
 
-class ProjectFactory:
+class FollowerAnalyzer:
     """
         Esta clase tiene como objectivo crear un projecto a partir de una configuracion dada
         Entre los parametros estan:
@@ -33,25 +33,15 @@ class ProjectFactory:
         self.centrality_analyzer = CentralityAnalyzer()
         self.trend_analyzer = TrendAnalyzer()
 
-    def save_project(self, project_name, keywords):
-        project = Project(name=project_name)
-        project.save()
-
-        for keyword in keywords:
-            _keyword = KeyWord(name=keyword, project=project)
-            _keyword.save()
-        return project
 
     '''
         from_date/to_date : Day Month Day (ex. Wed Jul 05)
     '''
-    def create_project(self, from_date, to_date, keywords, project_name):
+    def start_followers_analyzer(self, from_date, to_date, keywords, project):
         logger.info("Starting extracting corpus")
-        tweets = db.tweet.find()
-        #tweets = db.tweet.find({'text': {'$regex': {"$in": keywords}}}).limit(5000)
+        # tweets = db.tweet.find()
+        tweets = db.tweet.find({'text': {'$regex': {"$in": keywords}}}).limit(5000)
         logger.info("Corpus completed! ")
-        logger.info("Starting saving project")
-        project = self.save_project(project_name, keywords)
 
         logger.info("Starting filter")
         tweets = self.filter_search(from_date, to_date, tweets)
@@ -130,10 +120,13 @@ class ProjectFactory:
         centrality_by_user = self.centrality_analyzer.get_centrality_by_user(users_saved)
         self.user_persistor.update_user_centrality(centrality_by_user)
 
+'''
 if __name__ == '__main__':
     date_from = datetime.strptime('2015-12-12', '%Y-%m-%d')
     date_to = datetime.strptime('2015-12-14', '%Y-%m-%d')
 
     project_factory = ProjectFactory()
     project_factory.create_project(date_from, date_to, ["macri", "massa", "scioli", "elecciones", "corrupcion",
+
                                                         "inseguridad", "ganancias"], "politica")
+'''
