@@ -18,7 +18,7 @@ db = client['mole']
 
 f1 = 80
 k1 = 8
-MIN_HASHTAG_PER_USER = 0
+MIN_HASHTAG_PER_USER = 2
 
 class HashtagAnalyzer:
 

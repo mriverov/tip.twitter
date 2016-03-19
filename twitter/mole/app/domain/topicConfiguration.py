@@ -1,6 +1,7 @@
 from app.models import Domain, Topic
 
 
+# Deprecated
 class TopicConfiguration:
 
     def __init__(self):
