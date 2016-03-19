@@ -77,7 +77,7 @@ class HashtagAnalyzer:
             if cant_processed % 10000 == 0:
                     logger.info("%i processed" % cant_processed)
 
-    def start_hashtag_analyzer(self):
+    def start_hashtag_analyzer(self, project_id):
 
         logger.info("Start tweet")
         tweets_hashtags = db.tweet.find({"entities.hashtags": {'$exists': True, '$not': {'$size': 0}}})

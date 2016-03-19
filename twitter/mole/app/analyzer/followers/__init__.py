@@ -40,7 +40,7 @@ class FollowerAnalyzer:
     def start_followers_analyzer(self, from_date, to_date, keywords, project):
         logger.info("Starting extracting corpus")
         # tweets = db.tweet.find()
-        tweets = db.tweet.find({'text': {'$regex': {"$in": keywords}}}).limit(5000)
+        tweets = db.tweet.find({'text': {'$regex': {"$in": keywords}}}, {'bla.hashtag' : hashtags}, {'bla.url' : urls}).limit(5000)
         logger.info("Corpus completed! ")
 
         logger.info("Starting filter")
@@ -85,7 +85,7 @@ class FollowerAnalyzer:
         logger.info("Total NOT matched: "+str(excluded_tweets))
         return filtered_tweets
 
-    def start_analyzer(self, users, tweets, project):
+    def start_analyzer2(self, users, tweets, project):
         logger.info("Starting centrality calculation")
         self.update_user_centrality(users)
         logger.info("Centrality completed!")
