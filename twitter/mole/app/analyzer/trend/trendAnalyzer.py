@@ -1,12 +1,14 @@
-from mole.app.models import Trend
+from mole.app.models import Trend, Tweet
+from mole.app.utils import LoggerFactory
 
 __author__ = 'Marina'
 
 from pytz import timezone
-from datetime import datetime
 from itertools import groupby
 
 utc = timezone('UTC')
+
+logger = LoggerFactory.create_logger()
 
 
 class TweetByTime:
@@ -20,11 +22,13 @@ class TweetByTime:
 
 
 class TrendAnalyzer:
+
     def __init__(self):
         pass
 
-    def build_trend(self, project_id):
-        pass
+    def build_trend(self, project):
+        tweets = Tweet.objects.get(project=project)
+        self.save_trend(tweets, project)
 
     """
         Como primer paso se crea un objeto nuevo que contiene el tweet y la hora en la que fue creado, de tal forma
@@ -35,6 +39,7 @@ class TrendAnalyzer:
         y luego se retorna un diccionario con la referencia al tweet para poder asociarlo en le modelo de django.
     """
     def save_trend(self, tweets, project):
+        logger.info("Start calculating trend with tweets "+ str(len(tweets)))
         tweets_by_time = []
         # crea objetos TweetByTime con la fecha mejor expresada
         for tweet in tweets:
@@ -72,4 +77,5 @@ class TrendAnalyzer:
             for tweet in tweet_hour:
                 trend_by_tweet[tweet.tweet.tweet_id] = trend
 
+        logger.info("Finish Trend")
         return trend_by_tweet
