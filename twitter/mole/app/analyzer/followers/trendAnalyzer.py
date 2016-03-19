@@ -23,6 +23,9 @@ class TrendAnalyzer:
     def __init__(self):
         pass
 
+    def build_trend(self, project_id):
+        pass
+
     """
         Como primer paso se crea un objeto nuevo que contiene el tweet y la hora en la que fue creado, de tal forma
         que se pueda manipular esa fecha para agrupar por mes, dia y hora.

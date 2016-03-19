@@ -71,7 +71,7 @@ class UrlAnalyzer:
             if cant_processed % 10000 == 0:
                     logger.info("%i processed" % cant_processed)
 
-    def start_url_analyzer(self):
+    def start_url_analyzer(self, project_id):
         logger.info("Start tweet")
         tweets_urls = db.tweet.find({"entities.urls": {'$exists': True, '$not': {'$size': 0}}})
         self.import_urls(tweets_urls)

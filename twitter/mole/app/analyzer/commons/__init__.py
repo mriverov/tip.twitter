@@ -1,3 +1,6 @@
+from mole.app.analyzer.followers.trendAnalyzer import TrendAnalyzer
+from mole.app.analyzer.hashtag import HashtagAnalyzer
+from mole.app.analyzer.url import UrlAnalyzer
 from mole.app.models import Project
 from mole.app.utils import LoggerFactory
 from datetime import datetime
@@ -9,6 +12,12 @@ client = p.MongoClient()
 db = client['mole']
 
 class AnalizerService:
+
+    def __init__(self):
+        self.url_analyzer = UrlAnalyzer()
+        self.hashtag_analyzer = HashtagAnalyzer()
+        self.trend_analyzer = TrendAnalyzer()
+
 
     def start_analyzer(self, project_id, keywords, hashtags, urls, from_date, to_date):
         project = Project.objects.get(pk=project_id)
@@ -30,12 +39,12 @@ class AnalizerService:
 
         for tweet in tweets:
             user = self.save_user_model(tweet['user'])
-            saved_tweet = self.save_tweet_model(project, tweet, user)
+            self.save_tweet_model(project, tweet, user)
         logger.info("Users and Tweets completed!")
 
-        self.start_analyzer_hashtag(project_id)
-        self.start_analyzer_url(project_id)
-        self.start_analyzer_trend(project_id)
+        self.hashtag_analyzer.start_hashtag_analyzer(project_id)
+        self.url_analyzer.start_url_analyzer(project_id)
+        self.trend_analyzer.build_trend(project_id)
 
 
     def filter_search(self, from_date, to_date, tweets):
