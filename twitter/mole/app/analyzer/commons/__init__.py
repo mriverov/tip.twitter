@@ -1,4 +1,5 @@
 from mole.app.utils import LoggerFactory
+from mole.app.analyzer.commons.filterService import FilterService
 import pymongo as p
 
 
@@ -10,24 +11,28 @@ db = client['mole']
 
 if __name__ == '__main__':
 
-    logger.info("start")
-    regex = '|'.join(["lanata", "macri", "90"])
-    #tweets = db.tweet.find({"text": {"$regex": regex, "$options": "i"} , 'entities.hashtags': {"$in": ["TVRKalabaza"]} })#,
-                            #'entities.urls': {"$in": [""]}
-                            #})
+    # logger.info("start")
+    # regex = '|'.join(["lanata", "macri", "90"])
+    # #tweets = db.tweet.find({"text": {"$regex": regex, "$options": "i"} , 'entities.hashtags': {"$in": ["TVRKalabaza"]} })#,
+    #                         #'entities.urls': {"$in": [""]}
+    #                         #})
+    #
+    # tweets = db.tweet.find({
+    #         "$or": [{
+    #             "text": {"$regex": regex, "$options": "i"}
+    #         }, {
+    #             "entities.hashtags": {"$in": ["TVRKalabaza"]}
+    #         }, {
+    #             "entities.urls": {"$in": [""]}
+    #         }]
+    #     });
+    #
+    # logger.info("Finish")
+    # logger.info((tweets.count()))
 
-    tweets = db.tweet.find({
-            "$or": [{
-                "text": {"$regex": regex, "$options": "i"}
-            }, {
-                "entities.hashtags": {"$in": ["TVRKalabaza"]}
-            }, {
-                "entities.urls": {"$in": [""]}
-            }]
-        });
-
-    logger.info("Finish")
-    logger.info((tweets.count()))
+    filterService = FilterService()
+    filters = filterService.generate_filters(["lanata", "macri", "90"])
+    logger.info(str(filters))
 
     '''
     date_from = datetime.strptime('2015-12-13', '%Y-%m-%d')

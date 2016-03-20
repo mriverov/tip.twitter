@@ -2,10 +2,10 @@ import logging
 from django.shortcuts import render, render_to_response
 from django.views.decorators.csrf import csrf_exempt
 
-from mole.app.analyzer import MoleConfigurationService
+from mole.app.analyzer.commons.projectService import ProjectService
 
 logger = logging.getLogger(__name__)
-mole_configuration = MoleConfigurationService()
+mole_configuration = ProjectService()
 
 
 def get_home(request):
@@ -30,7 +30,7 @@ def start_digger(request):
 
     project_id = request.session.get('project')
 
-    mole_configuration.start_analyzer(project_id, keywords)
+    mole_configuration.start(project_id, keywords)
 
     logger.info(" Configured project: " + project_id + " with keywords: " + str(keywords))
     return render_to_response('streaming_started.html', {'keyword': keywords})
