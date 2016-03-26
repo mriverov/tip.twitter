@@ -29,7 +29,7 @@ class ProjectService:
         # date_from = datetime.strptime('2015-12-12', '%Y-%m-%d')
         # date_to = datetime.strptime('2015-12-14', '%Y-%m-%d')
 
-        filters = self.filter_service.generateFilters(keywords)
+        filters = self.filter_service.generateFilters(keywords, date_from, date_to)
         self.analyzer_service.start_analyzer(project, keywords, filters[hashtags], filters[urls], date_from, date_to)
         # hay que tener presente que estos analisis se hacen sobre toda la base, no se filtra por proyecto
 

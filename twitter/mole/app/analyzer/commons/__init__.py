@@ -1,6 +1,7 @@
 from mole.app.utils import LoggerFactory
 from mole.app.analyzer.commons.filterService import FilterService
 import pymongo as p
+from datetime import datetime
 
 
 logger = LoggerFactory.create_logger()
@@ -31,7 +32,9 @@ if __name__ == '__main__':
     # logger.info((tweets.count()))
 
     filterService = FilterService()
-    filters = filterService.generate_filters(["lanata", "macri", "90"])
+    date_from = datetime.strptime('2015-09-10', '%Y-%m-%d')
+    date_to = datetime.strptime('2015-09-14', '%Y-%m-%d')
+    filters = filterService.generate_filters(["macri"], date_from, date_to)
     logger.info(str(filters))
 
     '''
