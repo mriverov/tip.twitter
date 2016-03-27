@@ -5,7 +5,7 @@ from django.db import models
 # Create your models here.
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'mole.settings'
-django.setup()
+# django.setup()
 
 class Project(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)

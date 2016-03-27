@@ -30,14 +30,13 @@ class HashtagAnalyzer:
         for tweet in tweets_hashtags:
             uid = tweet['user']['id']
             hashtags = tweet['entities']['hashtags']
-            if hashtags is not None:
-                for a_hashtag in hashtags:
-                    hashtag = Hashtag(user_id=uid, hashtag=a_hashtag['text'])
-                    try:
-                        hashtag.save()
-                    except django.db.utils.OperationalError as e:
-                        logger.error("Could not process hashtag for user %s" % str(uid))
-                        not_process += 1
+            for a_hashtag in hashtags:
+                hashtag = Hashtag(user_id=uid, hashtag=a_hashtag['text'])
+                try:
+                    hashtag.save()
+                except django.db.utils.OperationalError as e:
+                    logger.error("Could not process hashtag for user %s" % str(uid))
+                    not_process += 1
         logger.info("Finished processing %s" % len(tweets_hashtags))
         logger.info("Hashtags rejected %s" % not_process)
 

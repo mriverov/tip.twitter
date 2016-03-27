@@ -29,11 +29,10 @@ class UrlAnalyzer:
     def import_urls(self, tweets_urls):
         for tweet in tweets_urls:
             uid = tweet['user']['id']
-            if tweet['entities']['urls'] is not None:
-                if tweet['entities']['urls'][0] is not None:
-                    u_url = tweet['entities']['urls'][0]['url']
-                    url = Urls(user_id=uid, url=u_url)
-                    url.save()
+            urls = tweet['entities']['urls']
+            for an_url in urls:
+                url = Urls(user_id=uid, url=an_url['url'])
+                url.save()
 
         logger.info("Finished prcessing %s" % len(tweets_urls))
 

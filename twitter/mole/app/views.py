@@ -1,38 +1,33 @@
+from datetime import datetime
 import logging
+
 from django.shortcuts import render, render_to_response
 from django.views.decorators.csrf import csrf_exempt
 
 from mole.app.analyzer.commons.projectService import ProjectService
 
 logger = logging.getLogger(__name__)
-mole_configuration = ProjectService()
+project_service = ProjectService()
 
-
-def get_home(request):
-    return render(request, 'home.html')
-
+def index(request):
+    return render(request, 'index.html')
 
 @csrf_exempt
 def new_project(request):
-    project = request.POST['project']
-    request.session['project'] = project
+    project_name = request.POST['project']
+    _keywords = request.POST['tags']
 
-    project_id = mole_configuration.save_project(project)
-
-    logger.info("Create project with name " + project + " with id " + project_id)
-    return render_to_response('configuration.html', {'project': project_id})
-
-
-@csrf_exempt
-def start_digger(request):
-    _keywords = request.POST['keywords']
     keywords = _keywords.split(',')
 
-    project_id = request.session.get('project')
+    from_date = datetime.strptime(request.POST['from_date'], '%d/%m/%Y')
+    to_date = datetime.strptime(request.POST['to_date'], '%d/%m/%Y')
 
-    mole_configuration.start(project_id, keywords)
+    project_id = project_service.save_project(project_name)
+    project_service.start(project_id, keywords, from_date, to_date)
 
-    logger.info(" Configured project: " + project_id + " with keywords: " + str(keywords))
-    return render_to_response('streaming_started.html', {'keyword': keywords})
+    logger.info("Create project with name " + project_name + " with id " + str(project_id))
+    logger.info(" Configured project: " + str(project_id) + " with keywords: " + str(keywords))
+    return render_to_response('congratulations.html')
+
 
 

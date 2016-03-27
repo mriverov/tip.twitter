@@ -26,8 +26,11 @@ class FilterService:
         pass
 
     def generate_filters(self, keywords, date_from, date_to):
+        logger.info("Starting generation of filters")
         query = ' '.join(keywords)
         date_range = DATE_RANGE.format(date_from=date_from.strftime("%Y%m%d"), date_to=date_to.strftime("%Y%m%d"))
+
+        logger.info("Date range = " + date_range)
 
         service = build(API_NAME, API_VERSION, developerKey=API_KEY)
         response = service.cse().list(cx=CX_KEY, q=query, sort=date_range).execute()
@@ -38,4 +41,5 @@ class FilterService:
         for item in response_json["items"]:
             urls.append(item["link"])
 
+        logger.info("Generated: " + str(len(hashtags)) + " hashtags and " + str(len(urls)) + " urls")
         return {'hashtags': hashtags, 'urls': urls}

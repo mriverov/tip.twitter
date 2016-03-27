@@ -24,6 +24,8 @@ class AnalyzerService:
 
     def start_analyzer(self, project, keywords, hashtags, urls, from_date, to_date):
         logger.info("Starting extracting corpus")
+        logger.info("Keywords: " + str(keywords))
+
         if not hashtags:
             hashtags.append('')
 

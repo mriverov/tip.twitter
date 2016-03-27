@@ -1,0 +1,73 @@
+body {
+    background-color: #55acee;
+    text-shadow: none;
+    font-weight: 400;
+}
+.masthead-brand { margin-top: 20px}
+label {
+    font-weight: 500;
+    display: block;
+}
+.mastfoot span { color: #ffffff}
+
+.masthead-brand {
+    font-family: 'Pacifico', cursive;
+    font-size: 400%;
+}
+
+.tm-tag {
+    color: #ffffff;
+    background-color: #0076a3;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    display: inline-block;
+    border-radius: 3px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    margin: 0 5px 5px 0;
+    padding: 6px 10px;
+    text-decoration: none;
+    transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+    -moz-transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+    -webkit-transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+    vertical-align: middle;
+}
+
+.tm-tag span { padding-right: 10px}
+.tm-tag .tm-tag-remove:hover {
+    text-decoration: none;  /* IE 8 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+    /* IE 5-7 */
+    filter: alpha(opacity=50);
+    /* Netscape */
+    -moz-opacity: 0.5;
+    /* Safari 1.x */
+    -khtml-opacity: 0.5;
+    /* Good browsers */
+    opacity: 0.5;
+}
+
+.btn-default, .btn-default:focus {
+    background-color: transparent;
+    border: 1px solid #fff;
+    color: #fff;
+    font-weight: 400;
+	margin-top:40px;
+	cursor:pointer !important;
+}
+.btn-default:hover, .btn-default.active, .btn-default:active {
+    background-color: #fff;
+    color:#55acee;
+	cursor:pointer !important;
+}
+h3 { margin-bottom:30px; font-weight:400}
+h4 { font-weight: 200}
+.congrats a { color:#0076a3; font-size:18px; padding:10px}
+.congrats p { margin:0; padding:0}
+.box {
+	border:1px solid #fff;
+	background-color:rgba(255,255,255,0.3);
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	padding:20px
+}
