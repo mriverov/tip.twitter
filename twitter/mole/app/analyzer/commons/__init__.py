@@ -1,5 +1,6 @@
 from mole.app.utils import LoggerFactory
 from mole.app.analyzer.commons.filterService import FilterService
+from mole.app.analyzer.commons.projectService import ProjectService
 import pymongo as p
 from datetime import datetime
 
@@ -31,11 +32,17 @@ if __name__ == '__main__':
     # logger.info("Finish")
     # logger.info((tweets.count()))
 
-    filterService = FilterService()
-    date_from = datetime.strptime('2015-09-10', '%Y-%m-%d')
-    date_to = datetime.strptime('2015-09-14', '%Y-%m-%d')
-    filters = filterService.generate_filters(["macri"], date_from, date_to)
-    logger.info(str(filters))
+    # filterService = FilterService()
+    project_service = ProjectService()
+    from_date = datetime.strptime('2015-09-10', '%Y-%m-%d')
+    to_date = datetime.strptime('2015-09-14', '%Y-%m-%d')
+    # filters = filterService.generate_filters(["macri"], date_from, date_to)
+    # logger.info(str(filters))
+
+    project_id = project_service.save_project("Test")
+    project_service.start(project_id, ["macri"], from_date, to_date)
+
+
 
     '''
     date_from = datetime.strptime('2015-12-13', '%Y-%m-%d')
