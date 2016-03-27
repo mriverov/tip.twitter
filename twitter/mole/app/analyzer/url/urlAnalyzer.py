@@ -35,16 +35,16 @@ class UrlAnalyzer:
                     url = Urls(user_id=uid, url=u_url)
                     url.save()
 
-        logger.info("Finished prcessing %s" % tweets_urls.count())
+        logger.info("Finished prcessing %s" % len(tweets_urls))
 
     def process_graph(self):
         visits = defaultdict(list)
-        p = 0;
+        processed = 0
         for url_entry in Urls.objects.all():
             visits[url_entry.user_id].append(url_entry.url)
-            p +=1
+            processed += 1
         logger.info("Urls read")
-        logger.info("Urls processed " + str(p))
+        logger.info("Urls processed " + str(processed))
         logger.info("Visits count " + str(len(visits)))
 
         objs = []

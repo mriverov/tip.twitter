@@ -13,7 +13,7 @@ class UserPersistor:
         self.user_dao = UserDAO()
 
     def save_follower(self, follower_id):
-        user = self.user_dao.get(follower_id);
+        user = self.user_dao.get(follower_id)
         if user is not None:
             logger.info("Follower found in Mongo %s" % follower_id)
             follower = self.save_user(user)

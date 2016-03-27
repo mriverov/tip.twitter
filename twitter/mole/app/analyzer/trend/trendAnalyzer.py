@@ -27,7 +27,7 @@ class TrendAnalyzer:
         pass
 
     def build_trend(self, project):
-        tweets = Tweet.objects.get(project=project)
+        tweets = Tweet.objects.filter(project=project)
         self.save_trend(tweets, project)
 
     """

@@ -1,6 +1,8 @@
 from mole.app.analyzer.hashtag.hashtagAnalyzer import HashtagAnalyzer
 from mole.app.analyzer.trend.trendAnalyzer import TrendAnalyzer
 from mole.app.analyzer.url.urlAnalyzer import UrlAnalyzer
+from mole.app.domain.userPersistor import UserPersistor
+from mole.app.domain.tweetPersistor import TweetPersistor
 from mole.app.utils import LoggerFactory
 from datetime import datetime
 import pymongo as p
@@ -14,6 +16,8 @@ db = client['mole']
 class AnalyzerService:
 
     def __init__(self):
+        self.user_persistor = UserPersistor()
+        self.tweet_persistor = TweetPersistor()
         self.url_analyzer = UrlAnalyzer()
         self.hashtag_analyzer = HashtagAnalyzer()
         self.trend_analyzer = TrendAnalyzer()
@@ -31,9 +35,8 @@ class AnalyzerService:
             "$or": [{"text": {"$regex": regex, "$options": "i"}},
                     {"entities.hashtags": {"$in": hashtags}},
                     {"entities.urls.expanded_url": {"$in": urls}}]
-        }
-        )
-        logger.info("Corpus completed! " + str(len(tweets)))
+        })
+        logger.info("Corpus completed! " + str(tweets.count()))
 
         logger.info("Starting filter")
         tweets = self.filter_search(from_date, to_date, tweets)
@@ -63,3 +66,10 @@ class AnalyzerService:
         logger.info("Total matched: " + str(len(filtered_tweets)))
         logger.info("Total NOT matched: " + str(excluded_tweets))
         return filtered_tweets
+
+    def save_user_model(self, user_content):
+        user = self.user_persistor.save_user(user_content)
+        return user
+
+    def save_tweet_model(self, project, content_tweet, user):
+        return self.tweet_persistor.save_tweet(content_tweet, project, user)
