@@ -43,9 +43,14 @@ class HashtagAnalyzer:
     def process_graph(self, project_id):
         visits = defaultdict(list)
         p = 0;
-        for hashtag_entry in Hashtag.objects.get(project_id=project_id):
+        hashtagsDb = Hashtag.objects.filter(project_id=project_id)
+
+        logger.info("Total hashtags to process "+str(len(hashtagsDb)))
+
+        for hashtag_entry in hashtagsDb:
             visits[hashtag_entry.user_id].append(hashtag_entry.hashtag)
             p +=1
+
         logger.info("Hashtag read")
         logger.info("Hashtag processed " + str(p))
         logger.info("Visits count " + str(len(visits)))
@@ -86,7 +91,7 @@ class HashtagAnalyzer:
         self.import_hashtags(tweets, project_id)
         logger.info("Finish reading tweets")
 
-        '''
+
         logger.info("Start graph")
         self.process_graph(project_id)
         logger.info("Finish graph")
@@ -99,4 +104,3 @@ class HashtagAnalyzer:
         centrality = centralityCalculator.calculate_cetrality(hashtags)
         persistor.persist_hashtag(centrality)
         logger.info("Finish centrality")
-        '''
