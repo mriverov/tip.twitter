@@ -26,20 +26,23 @@ class UrlAnalyzer:
     def __init__(self):
         pass
 
-    def import_urls(self, tweets_urls):
+    def import_urls(self, tweets_urls, project_id):
         for tweet in tweets_urls:
             uid = tweet['user']['id']
             urls = tweet['entities']['urls']
             for an_url in urls:
-                url = Urls(user_id=uid, url=an_url['url'])
+                url = Urls(user_id=uid, url=an_url['url'], project_id=project_id)
                 url.save()
 
         logger.info("Finished prcessing %s" % len(tweets_urls))
 
-    def process_graph(self):
+    def process_graph(self, project_id):
         visits = defaultdict(list)
         processed = 0
-        for url_entry in Urls.objects.all():
+        urls_db = Urls.objects.filter(project_id=project_id)
+
+        logger.info("Total urls to process "+str(len(urls_db)))
+        for url_entry in urls_db:
             visits[url_entry.user_id].append(url_entry.url)
             processed += 1
         logger.info("Urls read")
@@ -76,9 +79,9 @@ class UrlAnalyzer:
             if cant_processed % 10000 == 0:
                     logger.info("%i processed" % cant_processed)
 
-    def start_url_analyzer(self, tweets):
-        logger.info("Start importing urls")
-        self.import_urls(tweets)
+    def start_url_analyzer(self, tweets, project_id):
+        logger.info("Start importing urls for project "+str(project_id))
+        self.import_urls(tweets, project_id)
         logger.info("Finish importing urls")
 
         logger.info("Start graph")

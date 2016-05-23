@@ -51,7 +51,7 @@ class AnalyzerService:
         logger.info("Users and Tweets completed!")
 
         self.hashtag_analyzer.start_hashtag_analyzer(tweets, project.pk)
-        #self.url_analyzer.start_url_analyzer(tweets)
+        self.url_analyzer.start_url_analyzer(tweets, project.pk)
         #self.trend_analyzer.build_trend(project)
 
     def filter_search(self, from_date, to_date, tweets):

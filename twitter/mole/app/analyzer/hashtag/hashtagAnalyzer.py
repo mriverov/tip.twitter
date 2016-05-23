@@ -43,11 +43,10 @@ class HashtagAnalyzer:
     def process_graph(self, project_id):
         visits = defaultdict(list)
         p = 0;
-        hashtagsDb = Hashtag.objects.filter(project_id=project_id)
+        hashtags_db = Hashtag.objects.filter(project_id=project_id)
 
-        logger.info("Total hashtags to process "+str(len(hashtagsDb)))
-
-        for hashtag_entry in hashtagsDb:
+        logger.info("Total hashtags to process "+str(len(hashtags_db)))
+        for hashtag_entry in hashtags_db:
             visits[hashtag_entry.user_id].append(hashtag_entry.hashtag)
             p +=1
 

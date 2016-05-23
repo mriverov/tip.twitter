@@ -41,6 +41,7 @@ class Tweet(models.Model):
 
 class Urls(models.Model):
     user_id = models.BigIntegerField(null=True, blank=True)
+    project_id = models.IntegerField(null=True, blank=True)
     url = models.CharField(max_length=5000, null=True, blank=True)
 
 class UrlsGraph(models.Model):
