@@ -25,13 +25,13 @@ class HashtagAnalyzer:
     def __init__(self):
         pass
 
-    def import_hashtags(self, tweets_hashtags):
+    def import_hashtags(self, tweets_hashtags, project_id):
         not_process = 0
         for tweet in tweets_hashtags:
             uid = tweet['user']['id']
             hashtags = tweet['entities']['hashtags']
             for a_hashtag in hashtags:
-                hashtag = Hashtag(user_id=uid, hashtag=a_hashtag['text'])
+                hashtag = Hashtag(user_id=uid, hashtag=a_hashtag['text'], project_id=project_id)
                 try:
                     hashtag.save()
                 except django.db.utils.OperationalError as e:
@@ -40,10 +40,10 @@ class HashtagAnalyzer:
         logger.info("Finished processing %s" % len(tweets_hashtags))
         logger.info("Hashtags rejected %s" % not_process)
 
-    def process_graph(self):
+    def process_graph(self, project_id):
         visits = defaultdict(list)
         p = 0;
-        for hashtag_entry in Hashtag.objects.all():
+        for hashtag_entry in Hashtag.objects.get(project_id=project_id):
             visits[hashtag_entry.user_id].append(hashtag_entry.hashtag)
             p +=1
         logger.info("Hashtag read")
@@ -80,15 +80,15 @@ class HashtagAnalyzer:
             if cant_processed % 10000 == 0:
                     logger.info("%i processed" % cant_processed)
 
-    def start_hashtag_analyzer(self, tweets):
+    def start_hashtag_analyzer(self, tweets, project_id):
 
-        logger.info("Read tweets from django")
-        self.import_hashtags(tweets)
+        logger.info("Read tweets from django for project " + str(project_id))
+        self.import_hashtags(tweets, project_id)
         logger.info("Finish reading tweets")
 
-
+        '''
         logger.info("Start graph")
-        self.process_graph()
+        self.process_graph(project_id)
         logger.info("Finish graph")
 
         logger.info("Starting centrality")
@@ -99,3 +99,4 @@ class HashtagAnalyzer:
         centrality = centralityCalculator.calculate_cetrality(hashtags)
         persistor.persist_hashtag(centrality)
         logger.info("Finish centrality")
+        '''

@@ -17,7 +17,7 @@ class ProjectService:
     def save_project(self, project_name):
         project = Project(name=project_name)
         project.save()
-        return project.pk # chequear si esto devuelve el id
+        return project.pk
 
     def save_keywords(self, project_id, keywords):
         project = Project.objects.get(pk=project_id)

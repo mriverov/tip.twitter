@@ -50,9 +50,9 @@ class AnalyzerService:
             self.save_tweet_model(project, tweet, user)
         logger.info("Users and Tweets completed!")
 
-        self.hashtag_analyzer.start_hashtag_analyzer(tweets)
-        self.url_analyzer.start_url_analyzer(tweets)
-        self.trend_analyzer.build_trend(project)
+        self.hashtag_analyzer.start_hashtag_analyzer(tweets, project.pk)
+        #self.url_analyzer.start_url_analyzer(tweets)
+        #self.trend_analyzer.build_trend(project)
 
     def filter_search(self, from_date, to_date, tweets):
         filtered_tweets = []

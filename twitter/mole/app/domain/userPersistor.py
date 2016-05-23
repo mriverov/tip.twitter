@@ -44,12 +44,15 @@ class UserPersistor:
         if _location is not None:
             location = self.encode(_location)
 
+        user = User(user_id=_id, screen_name=screen_name, followers_count=_followers_count, location=location)
+        user.save()
+        '''
         try:
             user = User.objects.get(user_id=_id)
         except User.DoesNotExist:
             user = User(user_id=_id, screen_name=screen_name, followers_count=_followers_count, location=location)
             user.save()
-
+        '''
         return user
 
     def update_user_centrality(self, centrality_dic):

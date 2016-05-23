@@ -55,6 +55,7 @@ class CentralityUrl(models.Model):
 
 class Hashtag(models.Model):
     user_id = models.BigIntegerField(null=True, blank=True)
+    project_id = models.IntegerField(null=True, blank=True)
     hashtag = models.CharField(max_length=5000, null=True, blank=True)
 
 
