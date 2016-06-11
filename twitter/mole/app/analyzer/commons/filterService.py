@@ -18,6 +18,7 @@ API_KEY = 'AIzaSyBSI6xS_mfoj3iS9hTNOJR8lySimPTwE9o'
 API_NAME = 'customsearch'
 API_VERSION = 'v1'
 DATE_RANGE = 'date:r:{date_from}:{date_to}'
+HOST = 'https://news.google.com.ar'
 
 
 class FilterService:
@@ -33,7 +34,7 @@ class FilterService:
         logger.info("Date range = " + date_range)
 
         service = build(API_NAME, API_VERSION, developerKey=API_KEY)
-        response = service.cse().list(cx=CX_KEY, q=query, sort=date_range).execute()
+        response = service.cse().list(cx=CX_KEY, q=query, sort=date_range, googlehost=HOST).execute()
         response_json = ast.literal_eval(json.dumps(response, sort_keys=True))
         hashtags = []
         urls = []
