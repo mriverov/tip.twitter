@@ -85,7 +85,7 @@ class UrlAnalyzer:
         logger.info("Finish importing urls")
 
         logger.info("Start graph")
-        self.process_graph()
+        self.process_graph(project_id)
         logger.info("Finish graph")
 
         logger.info("Starting urls centrality")

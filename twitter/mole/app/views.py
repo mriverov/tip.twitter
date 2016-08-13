@@ -26,7 +26,7 @@ def new_project(request):
     project_service.start(project_id, keywords, from_date, to_date)
 
     logger.info("Create project with name " + project_name + " with id " + str(project_id))
-    logger.info(" Configured project: " + str(project_id) + " with keywords: " + str(keywords))
+    logger.info("Configured project: " + str(project_id) + " with keywords: " + str(keywords))
     return render_to_response('congratulations.html')
 
 
