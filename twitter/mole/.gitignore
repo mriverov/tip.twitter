@@ -1,7 +1,7 @@
+celerybeat-schedule.db
 *~
 *.pyc
 keys.cfg
 .idea/
 *.log
 
-twitter/mole/settings.py
