@@ -1,15 +1,14 @@
-from django.conf.urls import patterns, url, include
-from app.views import index, new_project
+from django.conf.urls import url
+from app.views import index, new_project, dashboard
 
 from django.contrib import admin
-from django.conf.urls.static import static
-from django.conf import settings
 
 admin.autodiscover()
 
 urlpatterns = [
     url(r'^$', index, name='index'),
     url(r'^new_project/$', new_project, name='new_project'),
+    url(r'^(?P<project_id>[0-9]+)/dashboard/$', dashboard, name='dashboard'),
 ]
 
 # urlpatterns = patterns(url(r'^admin/', include(admin.site.urls)),

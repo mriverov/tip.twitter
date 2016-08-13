@@ -1,6 +1,7 @@
 from datetime import datetime
 import logging
 
+from django.http.response import HttpResponse
 from django.shortcuts import render, render_to_response
 from django.views.decorators.csrf import csrf_exempt
 
@@ -22,12 +23,19 @@ def new_project(request):
     from_date = datetime.strptime(request.POST['from_date'], '%d/%m/%Y')
     to_date = datetime.strptime(request.POST['to_date'], '%d/%m/%Y')
 
-    project_id = project_service.save_project(project_name)
-    project_service.start(project_id, keywords, from_date, to_date)
+    project_id = 2
+    # project_service.save_project(project_name)
+    # project_service.start(project_id, keywords, from_date, to_date)
 
     logger.info("Create project with name " + project_name + " with id " + str(project_id))
     logger.info("Configured project: " + str(project_id) + " with keywords: " + str(keywords))
-    return render_to_response('congratulations.html')
+
+    return render(request, 'congratulations.html', {'project_id': project_id})
+
+
+def dashboard(request, project_id):
+    response = "You're looking at the results of question %s."
+    return HttpResponse(response % project_id)
 
 
 
