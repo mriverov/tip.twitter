@@ -10,6 +10,7 @@ from mole.app.analyzer.commons.projectService import ProjectService
 logger = logging.getLogger(__name__)
 project_service = ProjectService()
 
+
 def index(request):
     return render(request, 'index.html')
 
@@ -34,8 +35,7 @@ def new_project(request):
 
 
 def dashboard(request, project_id):
-    response = "You're looking at the results of question %s."
-    return HttpResponse(response % project_id)
+    return render(request, 'dashboard.html', {'project_id': project_id})
 
 
 
