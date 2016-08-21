@@ -22,7 +22,7 @@ class AnalyzerDAOService:
 
         users = [cent.user_id for cent in centrality_url]
 
-        persisted_users = User.objects.filter(user_id__in=users)
+        persisted_users = User.objects.filter(user_id__in=users, project_id=project_id)
 
         for p_user in persisted_users:
             cen = filter(lambda c: c.user_id == p_user.user_id, centrality_url)

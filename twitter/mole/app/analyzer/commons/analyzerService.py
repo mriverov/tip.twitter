@@ -46,7 +46,7 @@ class AnalyzerService:
 
         logger.info("Start saving tweets " + str(len(tweets)))
         for tweet in tweets:
-            user = self.save_user_model(tweet['user'])
+            user = self.save_user_model(tweet['user'], project.pk)
             self.save_tweet_model(project, tweet, user)
         logger.info("Users and Tweets completed!")
 
@@ -69,8 +69,8 @@ class AnalyzerService:
         logger.info("Total NOT matched: " + str(excluded_tweets))
         return filtered_tweets
 
-    def save_user_model(self, user_content):
-        user = self.user_persistor.save_user(user_content)
+    def save_user_model(self, user_content, project_id):
+        user = self.user_persistor.save_user(user_content, project_id)
         return user
 
     def save_tweet_model(self, project, content_tweet, user):

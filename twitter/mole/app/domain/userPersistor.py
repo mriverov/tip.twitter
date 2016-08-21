@@ -26,16 +26,16 @@ class UserPersistor:
         return follower
 
 
-    def save_user(self, user_content):
+    def save_user(self, user_content, project_id):
         _user_id = user_content['id']
         _screen_name = user_content['screen_name']
         _location = user_content['location']
         _followers_count = user_content['followers_count']
 
-        user = self.validate_and_save(_user_id, _screen_name, _followers_count, _location)
+        user = self.validate_and_save(_user_id, _screen_name, _followers_count, _location, project_id)
         return user
 
-    def validate_and_save(self, _id, _screen_name, _followers_count, _location):
+    def validate_and_save(self, _id, _screen_name, _followers_count, _location, project_id):
         screen_name = None
         location = None
 
@@ -44,7 +44,8 @@ class UserPersistor:
         if _location is not None:
             location = self.encode(_location)
 
-        user = User(user_id=_id, screen_name=screen_name, followers_count=_followers_count, location=location)
+        user = User(user_id=_id, screen_name=screen_name, followers_count=_followers_count, location=location,
+                    project_id=project_id)
         user.save()
         '''
         try:
