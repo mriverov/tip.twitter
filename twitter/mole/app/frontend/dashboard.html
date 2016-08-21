@@ -23,125 +23,73 @@
   </head>
 
 <!-- line graph -->
-  <div class="col-md-6 col-sm-6 col-xs-12">
+<div class="col-md-12 col-sm-12 col-xs-12">
     <div class="x_panel">
       <div class="x_title">
-        <h2>Line Graph <small>Sessions</small></h2>
+        <h2>Gráfico de tendencias <small>picos de tweets en el tiempo</small></h2>
         <ul class="nav navbar-right panel_toolbox">
           <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-          </li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-            <ul class="dropdown-menu" role="menu">
-              <li><a href="#">Settings 1</a>
-              </li>
-              <li><a href="#">Settings 2</a>
-              </li>
-            </ul>
-          </li>
-          <li><a class="close-link"><i class="fa fa-close"></i></a>
           </li>
         </ul>
         <div class="clearfix"></div>
       </div>
       <div class="x_content2">
-        <div id="graph_line" style="width:100%; height:300px;"></div>
+        <div id="graph_bar" style="width:100%; height:300px;"></div>
       </div>
     </div>
   </div>
 
-  <div class="row">
     <div class="col-md-6 col-sm-6 col-xs-12">
       <div class="x_panel">
         <div class="x_title">
-          <h2>Basic Tables <small>basic table subtitle</small></h2>
+          <h2>Usuarios mas populares <small>metrica obtenida a partir de urls</small></h2>
           <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-            </li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-              <ul class="dropdown-menu" role="menu">
-                <li><a href="#">Settings 1</a>
-                </li>
-                <li><a href="#">Settings 2</a>
-                </li>
-              </ul>
-            </li>
-            <li><a class="close-link"><i class="fa fa-close"></i></a>
             </li>
           </ul>
           <div class="clearfix"></div>
         </div>
         <div class="x_content">
-
           <table class="table">
             <thead>
               <tr>
                 <th>#</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Username</th>
+                <th>Usurio</th>
+                <th>Centralidad</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
-              </tr>
+                {% for cen in centrality %}
+                <tr>
+                  <th scope="row">{{ forloop.counter }}</th>
+                  <td>{{cen.name}}</td>
+                  <td>{{cen.centrality}}</td>
+                </tr>
+                {% endfor %}
             </tbody>
           </table>
-
         </div>
       </div>
     </div>
 
+
     <div class="col-md-6">
-              <div class="x_panel">
-                <div class="x_title">
-                  <h2>Tweets mas populares <small>Mas retweets</small></h2>
-              
-                  <div class="clearfix"></div>
-                </div>
-                <div class="x_content bs-example-popovers">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Tweets mas populares <small>Mas retweets</small></h2>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content bs-example-popovers">
+              {% for tweet in tweets %}
+                 <div class="alert alert-info alert-dismissible fade in" role="alert">
+                    <button type="button" class="close" data-dismiss="alert"> </button>
+                        <strong>{{tweet.author.screen_name}}</strong> {{tweet.text}}
+                 </div>
+              {% endfor %}
+          </div>
+        </div>
+      </div>
 
-                  <div class="alert alert-success alert-dismissible fade in" role="alert">
-                    <button type="button" class="close" data-dismiss="alert">
-                    </button>
-                    <strong>Holy guacamole!</strong> Best check yo self, you're not looking too good.
-                  </div>
-                  <div class="alert alert-info alert-dismissible fade in" role="alert">
-                    <button type="button" class="close" data-dismiss="alert">
-                    </button>
-                    <strong>Holy guacamole!</strong> Best check yo self, you're not looking too good.
-                  </div>
-                  <div class="alert alert-warning alert-dismissible fade in" role="alert">
-                    <button type="button" class="close" data-dismiss="alert">
-                    </button>
-                    <strong>Holy guacamole!</strong> Best check yo self, you're not looking too good.
-                  </div>
-                  <div class="alert alert-danger alert-dismissible fade in" role="alert">
-                    <button type="button" class="close" data-dismiss="alert">
-                    </button>
-                    <strong>Holy guacamole!</strong> Best check yo self, you're not looking too good.
-                  </div>
-
-                </div>
-              </div>
-            </div>
   <!-- /line graph -->
 
    <!-- jQuery -->
@@ -163,20 +111,24 @@
   <script>
     $(document).ready(function() {
       Morris.Line({
-              element: 'graph_line',
-              xkey: 'year',
-              ykeys: ['value'],
-              labels: ['Value'],
+              element: 'graph_bar',
+              xkey: 'date',
+              ykeys: ['count'],
+              labels: ['count'],
               hideHover: 'auto',
-              lineColors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
+              lineColors: ['#32a1ef', '#34495E', '#ACADAC', '#3498DB'],
+
               data: [
-                {year: '2012', value: 20},
-                {year: '2013', value: 10},
-                {year: '2014', value: 5},
-                {year: '2015', value: 5},
-                {year: '2016', value: 20}
+                {% for trend in trends %}
+                  { date: '{{trend.date}}' , count: {{trend.tweets_count}} },
+                {% endfor %}
+
+
               ],
-              resize: true
+              resize: false,
+              barRatio: 0.4,
+              xLabelAngle: 35,
+
             });
       });
   </script>

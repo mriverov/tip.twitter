@@ -31,7 +31,7 @@ class UrlAnalyzer:
             uid = tweet['user']['id']
             urls = tweet['entities']['urls']
             for an_url in urls:
-                url = Urls(user_id=uid, url=an_url['url'], project_id=project_id)
+                url = Urls(user_id=uid, url=an_url['url'], project_id=project_id, tweet_id=tweet['id'])
                 url.save()
 
         logger.info("Finished prcessing %s" % len(tweets_urls))
@@ -73,7 +73,7 @@ class UrlAnalyzer:
                     intersect = set(urls).intersection(urls_near_dups)
                     ratio = len(intersect)*1.0/len(urls_near_dups)
                     if ratio >= 0.1:
-                        url_graph = UrlsGraph(user_oid_i=user, user_oid_j=user_near_dups, ratio=ratio)
+                        url_graph = UrlsGraph(user_oid_i=user, user_oid_j=user_near_dups, ratio=ratio, project_id=project_id)
                         url_graph.save()
             cant_processed += 1
             if cant_processed % 10000 == 0:
@@ -92,8 +92,8 @@ class UrlAnalyzer:
         centralityUrlCalculator = Centrality()
         persistor = CentralityPersistor()
 
-        urls = UrlsGraph.objects.all()
+        urls = UrlsGraph.objects.filter(project_id=project_id)
         centrality = centralityUrlCalculator.calculate_cetrality(urls)
-        persistor.persist_url(centrality)
+        persistor.persist_url(centrality, project_id)
         logger.info("Finish urls centrality")
 

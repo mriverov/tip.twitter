@@ -78,14 +78,13 @@ class HashtagAnalyzer:
                     intersect = set(hashtags).intersection(hashtag_near_dups)
                     ratio = len(intersect)*1.0/len(hashtag_near_dups)
                     if ratio >= 0.1:
-                        hashtag_graph = HashtagGraph(user_oid_i=user, user_oid_j=user_near_dups, ratio=ratio)
+                        hashtag_graph = HashtagGraph(user_oid_i=user, user_oid_j=user_near_dups, ratio=ratio, project_id=project_id)
                         hashtag_graph.save()
             cant_processed += 1
             if cant_processed % 10000 == 0:
                     logger.info("%i processed" % cant_processed)
 
     def start_hashtag_analyzer(self, tweets, project_id):
-
         logger.info("Read tweets from django for project " + str(project_id))
         self.import_hashtags(tweets, project_id)
         logger.info("Finish reading tweets")
@@ -99,7 +98,7 @@ class HashtagAnalyzer:
         centralityCalculator = Centrality()
         persistor = CentralityPersistor()
 
-        hashtags = HashtagGraph.objects.all()
+        hashtags = HashtagGraph.objects.filter(project_id=project_id)
         centrality = centralityCalculator.calculate_cetrality(hashtags)
-        persistor.persist_hashtag(centrality)
+        persistor.persist_hashtag(centrality, project_id)
         logger.info("Finish centrality")

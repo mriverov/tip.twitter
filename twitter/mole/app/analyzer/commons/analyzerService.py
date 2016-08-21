@@ -52,7 +52,7 @@ class AnalyzerService:
 
         self.hashtag_analyzer.start_hashtag_analyzer(tweets, project.pk)
         self.url_analyzer.start_url_analyzer(tweets, project.pk)
-        #self.trend_analyzer.build_trend(project)
+        self.trend_analyzer.build_trend(project)
 
     def filter_search(self, from_date, to_date, tweets):
         filtered_tweets = []

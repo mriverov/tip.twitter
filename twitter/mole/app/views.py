@@ -24,9 +24,8 @@ def new_project(request):
     from_date = datetime.strptime(request.POST['from_date'], '%d/%m/%Y')
     to_date = datetime.strptime(request.POST['to_date'], '%d/%m/%Y')
 
-    project_id = 2
-    # project_service.save_project(project_name)
-    # project_service.start(project_id, keywords, from_date, to_date)
+    project_id = project_service.save_project(project_name)
+    project_service.start(project_id, keywords, from_date, to_date)
 
     logger.info("Create project with name " + project_name + " with id " + str(project_id))
     logger.info("Configured project: " + str(project_id) + " with keywords: " + str(keywords))
@@ -35,7 +34,11 @@ def new_project(request):
 
 
 def dashboard(request, project_id):
-    return render(request, 'dashboard.html', {'project_id': project_id})
+    tweets = project_service.get_popular_tweets(project_id)
+    centrality = project_service.get_url_user_centrality(project_id)
+    trend = project_service.get_trend(project_id)
+    return render(request, 'dashboard.html', {'project_id': project_id, 'tweets': tweets, 'centrality': centrality,
+                                              'trends': trend})
 
 
 
